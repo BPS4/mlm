@@ -1136,6 +1136,7 @@
                             if ($(this).val() === "DEACTIVATED") {
                                 // Search for any occurrence of "DEACTIVATED"
                                 table.columns(5).search("DEACTIVATED", true, false).draw();
+                                $('tr:hidden').removeAttr('style');
                             } else if ($(this).val() === "ACTIVE") {
                                 // Search for "ACTIVE"
                                 table.columns(5).search("^ACTIVE$", true, false).draw();
