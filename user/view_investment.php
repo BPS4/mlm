@@ -361,7 +361,7 @@
                                                                 
                                                                 ?>
                                                                   
-<?php if ($transaction_status === 'DEACTIVATED'): ?>
+                                                                  <?php if (strpos($transaction_status, 'DEACTIVATED') !== false): ?>
 <tr style="display: none;">
     <td><?php echo $i; ?></td>
     <td class="d-none"><?php echo $user_id; ?></td>
@@ -382,6 +382,7 @@
     <td><?php echo $update_date; ?></td>
 </tr>
 <?php endif; ?>
+
                                                                 <?php
                                                             }
                                                         ?>                                                    
