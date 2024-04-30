@@ -1,0 +1,80 @@
+
+
+@font-face {
+    font-family:"Rye-Regular";
+    src: url("../fonts/Rye-Regular.ttf") format("truetype");
+    }
+    @font-face {
+    font-family:"ATLibertyRegular";
+    src: url("../fonts/ATLibertyRegular.otf") format("opentype");
+    }
+    
+    body{margin:0px;background:#f5f5dd;}
+    
+    .welcomeletter{width:900px;height:1272px;position:relative;display:block;margin:20px auto;
+    background: url(../images/welcometopbg.png) center top no-repeat, url(../images/welcomebottombg.jpg) center bottom no-repeat;background-size:contain;}
+    .wcbox{position: relative;display: block; width: 100%;height: 100%;padding: 50px 90px;box-sizing: border-box;}
+    .wcbox .wlogo{width: 180px;height: 160px;margin: auto;overflow: hidden;position: relative;}
+    .wcbox .wlogo img,
+    .wcbox .wcsignature img{width:auto;max-width:100%;height:auto;max-height:100%;margin:auto;position:relative;}
+    .wcbox .welcometxt{width: 100%;height:94px;overflow:hidden; position: relative;display: block;font-family:"Rye-Regular"; font-size: 80px;text-align: center;line-height: 94px;}
+    .wcbox ul{margin:0px;padding:0px;list-style:none;}
+    .wcbox ul li{float:left;width:calc(100% - 150px);margin-bottom:5px;}
+    .wcbox ul li:last-child{width:150px;}
+    .wcbox li .wcpix{height: 140px;position: relative;display: block; overflow: hidden; width: 120px;border:2px #000 solid; visibility: hidden;}
+    .wcbox li .wcpix img{width:100%;height:100%;}
+    .wcbox li p{ padding-top: 80px;margin-bottom:8px;}
+    .wcbox p{margin:0 0 25px 0; font-size: 24px;line-height: 28px;}
+    .wcbox .wishes{font-family:"ATLibertyRegular";font-size: 50px;text-align: center; color: #F44336; font-weight: bold;padding-top:15px;}
+    .wcbox table{width:100%;max-width:600px;margin:auto;}
+    .wcbox table td{width:50%;vertical-align:bottom;}
+    .wcbox .blackline{display:block;margin:auto;width:100%;text-align:center;max-width:486px;}
+    .wcbox .blackline img{width:100%;}
+    .wcbox .director{background:url(../images/dirctot.jpg) center bottom no-repeat;background-size:188px;padding-bottom:43px;width: 220px;float:left;position:relative;overflow:hidden;}
+    .wcbox .director img{width:auto;max-width:100%;display:block;margin:auto;}
+    .wcbox .conglogo{width:225px;float:right;overflow:hidden;}
+    .wcbox .conglogo img{width:100%;}
+    .wcbox .wcwebsite{font-weight: bold;font-size: 18px; font-family: monospace;text-align: center;}
+    .wcbox .wcwebsite a{color:#000;text-decoration:none;}
+    
+    
+    @media all and (max-width: 768px) {
+        .welcomeletter{width:100%;height:auto;}
+        .welcomeletter .wcbox:after,
+        .welcomeletter .wcbox:before{content:"";position:absolute;bottom: 95px;    height: calc(100% - 200px);width: 29px; z-index: -1;}
+        .welcomeletter .wcbox:after{background:url(../images/leftbdr.jpg) bottom repeat;    background-size: contain; left: 0;}
+        .welcomeletter .wcbox:before{background:url(../images/rightbdr.jpg) bottom repeat;    background-size: contain; right: 0;}
+        .wcbox .wlogo {width: 120px;height: 120px;}
+        .wcbox .welcometxt{height:60px;font-size:50px;line-height:60px;}
+        .wcbox ul li {width: calc(100% - 120px);}
+        .wcbox ul li:last-child {width: 120px;}
+        .wcbox li .wcpix{height:115px;width:100px;}
+        .wcbox li p{padding-top:60px;}
+        .wcbox p {margin: 0 0 15px 0;font-size: 18px;line-height: 24px;}
+        .wcbox .conglogo,
+        .wcbox .director{width:110px;}
+        .wcbox .director{background-size:contain;}
+        .wcbox .wcwebsite {font-size: 13px;padding-top: 10px;}
+        
+    }
+    @media all and (max-width: 767px) {
+        .wcbox{padding:20px 40px;}
+        .wcbox p{font-size:16px;margin-bottom:10px;line-height:normal;}
+        .wcbox .welcometxt {height: 40px;font-size: 26px;line-height: 30px;}
+        .wcbox ul li {width: calc(100% - 80px);}
+        .wcbox ul li:last-child {width: 80px;}
+        .wcbox li .wcpix {height: 80px;width: 70px;}
+        .wcbox li p {padding-top: 22px;margin-bottom:0px;}
+        .wcbox .wishes{font-size:20px;}
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
