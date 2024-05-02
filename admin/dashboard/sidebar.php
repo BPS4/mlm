@@ -191,6 +191,15 @@
                     Withdrawal
                 </a>
                 <ul id="Withdrawal" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
+
+                <li class="sidebar-item mb-0">
+                        <a class="sidebar-link" href="do_withdrawal.php">
+                            <i class="fa-solid fa-indian-rupee fa-xl" style="color: #3f80ea !important;"></i>
+                            Do User Withdrawals
+                        </a>
+                    </li>
+
+
                     <li class="sidebar-item mb-0">
                         <a class="sidebar-link" href="view_withdrawal_pending.php">
                             <i class="fa-solid fa-indian-rupee fa-xl" style="color: #3f80ea !important;"></i>

@@ -141,11 +141,41 @@
     }
 
     error_occurred:
-	$query = "SELECT `id`, `sponsor_id`, `user_id`, `user_rank`, `name`, `fhname`, `mobile`, `email`, `whatsapp`,`aadhaar`, `aadhaar_file`, `pan`, `pan_file`, `bank_name`, `branch_name`, `account_no`, `ifs_code`, `upi_handle`, `address`, `city`, `state`, `pin_code`, `fund_wallet`, `fund_commission`, `fund_total`, `status`, `is_bank_updated`, `level1_member`, `level2_member`, `level3_member`, `level4_member`, `level5_member`, `level1_member_active`, `level2_member_active`, `level3_member_active`, `level4_member_active`, `level5_member_active`, `is_active`, `password`, `kyc_status`, `create_date`, `active_date` FROM `users` WHERE `delete_date` IS NULL ORDER BY `create_date` DESC";
+    $query = "SELECT 
+    u.`id`, u.`sponsor_id`, u.`user_id`, u.`user_rank`, u.`name`, u.`fhname`, 
+    u.`mobile`, u.`email`, u.`whatsapp`, u.`aadhaar`, u.`aadhaar_file`, 
+    u.`pan`, u.`pan_file`, u.`bank_name`, u.`branch_name`, u.`account_no`, 
+    u.`ifs_code`, u.`upi_handle`, u.`address`, u.`city`, u.`state`, u.`pin_code`, 
+    u.`fund_wallet`, u.`fund_commission`, u.`fund_total`, u.`status`, 
+    u.`is_bank_updated`, u.`level1_member`, u.`level2_member`, u.`level3_member`, 
+    u.`level4_member`, u.`level5_member`, u.`level1_member_active`, u.`level2_member_active`, 
+    u.`level3_member_active`, u.`level4_member_active`, u.`level5_member_active`, 
+    u.`is_active`, u.`password`, u.`kyc_status`, u.`create_date`, u.`active_date`,
+    w.`wallet_roi`, w.`wallet_commission`, w.`superwallet`,
+    IFNULL(wd.total_withdrawal_amount, 0) AS total_withdrawal_amount
+FROM 
+    `users` u
+LEFT JOIN 
+    `wallets` w ON u.`user_id` = w.`user_id`
+LEFT JOIN
+    (SELECT user_id, SUM(withdrawal_amount) AS total_withdrawal_amount 
+     FROM withdrawal 
+     WHERE `status` = 'approved' 
+     GROUP BY user_id) wd 
+    ON u.user_id = wd.user_id
+WHERE 
+    u.`delete_date` IS NULL 
+ORDER BY 
+    u.`create_date` DESC";
+
+
+
+
     // $query = mysqli_query($conn, "SELECT `sponsor_id`,`user_id`,`password`,`name`,`mobile`,`email`,`create_date` FROM `users` WHERE `packages` LIKE '%$package_amount%' ORDER BY `create_date` DESC");
     $query = mysqli_query($conn, $query);
     $members = mysqli_fetch_all($query, MYSQLI_ASSOC);
     $total_count = mysqli_num_rows($query);
+    // print_r($members);
 
     $sponsor_name = get_user_name($conn,$user_id);
 
@@ -268,6 +298,9 @@
                                                 <th>IFSC</th>
                                                 <th>A/c No.</th>
                                                 <th>Investment</th>
+                                                <th>ROI Wallet</th>
+                                                <th>Commission Wallet</th>
+                                                <th>Total Withdrawal</th>
                                                 <th>Address</th>
                                                 <th>KYC</th>
                                                 <!-- <th>Fund Wallet</th>
@@ -295,9 +328,12 @@
                                                 $classStatus = 'bg-success';
 
                                                 $id = $member['id'];
+
+                                                
                                                 $sponsor_id_member = $member['sponsor_id'];
                                                 $user_id_member = $member['user_id'];
 			                                    $member_id_encode = base64_encode(json_encode($user_id_member));     //ENCODE
+                                                // get_active_investment($id);
                                                 
                                                 if ($user_id_member == "maxizone") {
                                                     $sponsor_id_member = "maxizone";
@@ -324,9 +360,10 @@
                                                 $city_member = $member['city'];
                                                 $state_member = $member['state'];
                                                 $pin_code_member = $member['pin_code'];
-                                                $fund_wallet_member = $member['fund_wallet'];
-                                                $fund_commission_member = $member['fund_commission'];
-                                                $fund_total_member = $member['fund_total'];
+                                                $wallet_roi = $member['wallet_roi'];
+                                                $wallet_commission = $member['wallet_commission'];
+                                                $superwallet = $member['superwallet'];
+                                                $total_withrawal= $member['total_withdrawal_amount'];
                                                 $status_member = $member['status'];
                                                 $is_bank_updated_member = $member['is_bank_updated'];
 
@@ -337,6 +374,7 @@
                                                 $password = $member['password'];
 
                                                 $investment = get_active_investment($user_id_member);
+                                                // print_r($wallet_commission);
 
                                                 //CHECK DATE FOR YYYY-MM-DD FORMAT
                                                     if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $create_date_member)) {
@@ -479,6 +517,9 @@
                                                     <td class="has-html text-center">
                                                         <span class="badge rounded alert-success text-uppercase text-bold text-dark" style="white-space: normal;">Rs. <?php echo $investment; ?></span>
                                                     </td>
+                                                    <td><?php echo $wallet_roi; ?></td>
+                                                    <td><?php echo $wallet_commission; ?></td>
+                                                    <td><?php echo $total_withrawal; ?></td>
                                                     <td class="<?php echo $address_class; ?> text-start"><?php echo $address; ?></td>
                                                     <td class="has-html text-center"><?php echo $kyc_status; ?></td>
                                                     <td class="text-center" style="white-space: nowrap;"><?php echo $create_date_member; ?></td>
@@ -510,6 +551,9 @@
                                                 <th>IFSC</th>
                                                 <th>A/c No.</th>
                                                 <th>Investment</th>
+                                                  <th>ROI Wallet</th>
+                                                <th>Commission Wallet</th>
+                                                <th>Total Withdrawal</th>
                                                 <th>Address</th>
                                                 <th>KYC</th>
                                                 <!-- <th>Fund Wallet</th>
@@ -547,6 +591,7 @@
                 var $filename = document.title;
                 var default_Order = '<?php echo $default_Order;?>';
                 var length_menu = '<?php echo isset($length_menu)?$length_menu:"";?>';
+                console.log(length_menu);
                 var table = $('#datatables').DataTable({
                     dom: /*'lBfrtip'*/ 'lBfrtip',
                     // Default Sort
@@ -950,6 +995,7 @@
                 // Apply the search
                 table.columns().every(function () {
                     var that = this;
+                    console.log(that);
                     $('input', this.footer()).on('keyup change clear', function () {
                         if (that.search() !== this.value) {
                             that.search(this.value).draw();
