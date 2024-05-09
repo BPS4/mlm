@@ -87,6 +87,7 @@ $admin_charges_commission = 0;
         $query = "SELECT * FROM `withdrawal` WHERE `user_id`='$user_id' and create_date >= '2024-03-01' ORDER BY `create_date` DESC";
         $res = mysqli_query($conn,$query);
         $transactions = mysqli_fetch_all($res,MYSQLI_ASSOC);
+        // print_r($transactions);
     // GET DATA
 
     // DEFAULT ORDER COLUMN SR
@@ -349,6 +350,7 @@ $admin_charges_commission = 0;
                                                     <tbody>
                                                         <?php
                                                             $i = 0;
+                                                            // print_r($transactions);
                                                             foreach ($transactions as $item) {
                                                                 $i++;
                                                                 $user_id = $item['user_id'];

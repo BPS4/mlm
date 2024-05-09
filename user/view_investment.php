@@ -320,6 +320,8 @@
                                                                         $transaction_date = $update_date = $create_date;
                                                                         break;
                                                                 }
+
+                                                                // print_r($status);
                                                              
                                                                 switch ($status) {
 

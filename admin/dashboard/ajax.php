@@ -76,6 +76,9 @@
                 }
 
             } else if ($action_to_perform == "rejected") {
+
+                // echo $_POST['from_wallet'];
+                // die();
                 $query_approve = "UPDATE `withdrawal` SET `status`='rejected',`comment`='$reject_comment',`update_date`='$current_date' WHERE `id`='$id_withdrawal'";
                 $res = mysqli_query($conn,$query_approve);
                 $count_record_update = mysqli_affected_rows($conn);
@@ -89,6 +92,13 @@
                     {
                         $query_approve = "UPDATE `wallets` SET `wallet_commission`=`wallet_commission`+$amount_withdrawal,`update_date`='$current_date' WHERE `user_id`='$id_user'";
                     }
+
+                    else if($from_wallet == "Investment Wallet")
+                    {
+                        $query_approve = "UPDATE `wallets` SET `wallet_investment`=`wallet_investment`+$amount_withdrawal,`update_date`='$current_date' WHERE `user_id`='$id_user'";
+                    }
+
+
                     else
                     {
                         $query_approve = "UPDATE `wallets` SET `superwallet`=`superwallet`+$amount_withdrawal,`update_date`='$current_date' WHERE `user_id`='$id_user'";
@@ -199,6 +209,9 @@
 
             // echo "$action_to_perform >> $id_user >> ";
             if ($action_to_perform == "approved") {
+
+               
+
                 $query_sponsor = "SELECT `users`.`user_id` AS 'donor_id', `sponsor_id` AS 'receiver_id', (SELECT `wallets`.`wallet_investment` FROM `wallets` WHERE `user_id`=`users`.`sponsor_id`) AS 'sponsor_investment' FROM `users` LEFT JOIN `wallets` ON `wallets`.`user_id`=`users`.`sponsor_id` WHERE `users`.`user_id`='$id_user'";
                 $query = mysqli_query($conn,$query_sponsor);
                 $res = mysqli_fetch_array($query);
@@ -243,6 +256,9 @@
                     }
                 }
             } else if ($action_to_perform == "rejected") {
+
+              
+
                 $query_approve = "UPDATE `fund_transaction` SET `status`='0',`comment`='$reject_comment',`updated_by`='$updated_by',`update_date`='$current_date' WHERE `id`='$txn_id'";
                 $res = mysqli_query($conn,$query_approve);
                 $count_record_update = mysqli_affected_rows($conn);
@@ -432,3 +448,14 @@
             return "kyc_pending";
         }
     }
+
+
+
+
+   
+
+               
+
+
+
+

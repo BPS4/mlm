@@ -133,18 +133,18 @@
 
  
     // GET WALLET DATA
-        $query_wallet = "SELECT `id`,`bank_name`, `branch_name`, `branch_address`, `account_no`, `ifs_code`, `upi_handle` , `upi_qrcode` FROM `users_admin` WHERE `user_id`='$user_id'";
-     //echo $query;
-        $query = mysqli_query($conn, $query_wallet);        
-        $res = mysqli_fetch_array($query);
-        extract($res);
-    // GET WALLET DATA
+    //     $query_wallet = "SELECT `id`,`bank_name`, `branch_name`, `branch_address`, `account_no`, `ifs_code`, `upi_handle` , `upi_qrcode` FROM `users_admin` WHERE `user_id`='$user_id'";
+    //  //echo $query;
+    //     $query = mysqli_query($conn, $query_wallet);        
+    //     $res = mysqli_fetch_array($query);
+    //     extract($res);
+    // // GET WALLET DATA
 ?>
 
 <head>
     <?php include_once('head.php'); ?>
 
-    <title><?php  echo "Bank Information - Admin - Maxizone"; ?></title>
+    <title><?php  echo "Do Withdrawal - Admin - Maxizone"; ?></title>
 
     <link rel="canonical" href="view_bankinfo.php">
 
@@ -195,53 +195,79 @@
                           
                         <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0">User info</h5>
+                                    <h3  class=" mb-0">User info</h3>
                                 </div>
+                                
+                          
+                               
+                               
                                 <div class="card-body">
-                                    <form id="submit_bankdetails" method="post" enctype="multipart/form-data" >
-                                    <input type="hidden" class="form-control" name="user_id" id="user_id" value="<?php echo $user_id;?>">
-                                    <input type="hidden" class="form-control" name="id" id="id" value="<?php echo $id;?>">
+                                    <form id="submit_withdrawal" method="post" enctype="multipart/form-data" >
+                                   
                                         <div class="row">                                                    
                                            
+                                   
+                                        <div class="alert alert-success" id="success_message" role="alert">
+                                      
+                                        </div>
+
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="upi_handle" class="form-label">User Id</label>
-                                                <input type="text" class="form-control" name="upi_handle" id="upi_handle" placeholder="User Id" >
+                                                <input type="text" class="form-control" name="user_id" id="user_id" placeholder="User Id" >
+                                                <span id="user_id_err" class="err_mess" style="color:red; font: size 10px;"></span>
                                             </div>	
+
+                                           
 
                                             <div class="mb-3 col-md-6">
                                                 <label for="branch_name" class="form-label">User Name</label>
-                                                <input type="text" class="form-control" name="branch_name" id="branch_name" placeholder="User Name" value="">
+                                                <input type="text" class="form-control" name="user_name" id="user_name" placeholder="User Name" >
                                             </div>
 
-                                            <div class="mb-3 col-xl-6">
-                                                <label for="bank_name" class="form-label">Wallet</label>
-                                                <select class="form-control " id="bank_name" name="bank_name" required>
-                                                    <option value="" >Investment</option>
-                                                    <option value="" >ROI</option>
-                                                    <option value="" >Commission</option>
+                                            <div class="mb-3 col-xl-12">
+                                                <label for="bank_name" class="form-label">Wallet-Type</label>
+                                                <select class="form-control " id="Wallet_Type" name="Wallet_Type" required>
+                                                <option value="Select" >Select</option>
+                                                    <option value="Investment Wallet" >Investment</option>
+                                                    <option value="ROI Wallet" >ROI</option>
+                                                    <option value="Comission Wallet" >Commission</option>
                                                    </option>
                                                             
                                                 </select>
                                             </div>
 
                                             <div class="mb-3 col-md-6">
-                                                <label for="branch_address" class="form-label">Amount</label>
-                                                <input type="text" class="form-control" name="branch_address" id="branch_address" placeholder="Amount" >
+                                                <label for="branch_address" class="form-label">Available Amount</label>
+                                                <input type="text" class="form-control" name="Amount" id="Amount" placeholder="Available Amount" readonly >
                                             </div>
+
                                             <div class="mb-3 col-md-6">
+                                                <label for="branch_address" class="form-label">Withdrawal Amount</label>
+                                                <input type="text" class="form-control" name="withdrawal_amount" id="withdrawal_amount" placeholder="Withdrawal Amount" >
+                                                <span id="withdrawal_amount_err" class="err_mess" style="color:red; font: size 10px;"></span>
+                                            </div>
+                                          
+
+                                            <div class="mb-3 col-md-6">
+
+
                                                 <label for="account_no" class="form-label">Deduction</label>
-                                                <input type="text" class="form-control" name="account_no" id="account_no" placeholder="Deduction" >
+                                                <input type="text" class="form-control" name="Deduction" id="Deduction" placeholder="Deduction" >
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label for="ifs_code" class="form-label">Net Amount</label>
-                                                <input type="text" class="form-control" name="ifs_code" id="ifs_code" placeholder="Net Amount" >
+                                                <input type="text" class="form-control" name="Net_Amount" id="Net_Amount" placeholder="Net Amount" >
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label for="ifs_code" class="form-label">Balance Amount</label>
+                                                <input type="text" class="form-control" name="Balance_Amount" id="Balance_Amount" placeholder="Net Amount" >
                                             </div>
                                            
                                            
                                             <div style="float:right;">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success" id="submit_bankdetails" name="submit_bankdetails">Submit</button>
+                                                <button type="button" class="btn btn-success" id="submit_withdrawal_button" name="submit_withdrawal">Submit</button>
                                             </div>
                                         </div>
                                     </form>
@@ -255,50 +281,165 @@
                 </div>
             </main>
 
+      
+
             <?php include_once('footer.php'); ?>
         </div>
     </div>
 
-    <!-- BEGIN ModalAction -->
-		<div class="modal fade" id="ModalAction" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h3 class="modal-title">Approve/Reject Document</h3>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p class="mb-0">
-							<div class="row align-items-center">
-								<input type="hidden" id="id_doc">
-								<input type="hidden" id="id_user">
-								<input type="hidden" id="force_reject">
-								<input type="hidden" id="force_approve">
-								<div class="mb-3 col-md-12">
-									<label for="select_action" class="text-bold">Select Action To Perform</label>
-									<select name="" id="select_action" class="form-control" onchange="toggle_comment();">
-										<option value="">Choose Action</option>
-										<option value="approved" id="select_approve">Approve</option>
-										<option value="rejected" id="select_reject">Reject</option>
-									</select>
-								</div>
-								<div class="mb-3 col-md-12 d-none" id="reject_comment_container">
-									<label for="reject_comment" class="text-bold">Reason/Comment For Rejection</label>
-									<input type="text" name="reject_comment" id="reject_comment" class="form-control" placeholder="Enter comment">
-								</div>
-							</div>
-							<div style="float:right;">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								<button type="submit" class="btn btn-success" id="btn_submit" onclick="process_kyc();">Submit</button>
-							</div>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!-- END ModalAction -->
+    
 
     <?php include_once('scripts.php'); ?>
 
-                                                    </Body>
-                                                    </html>
+                                <script>
+                            $(document).ready(function () {
+                                var responseData; // Define responseData in a broader scope
+                                var amount; // Define amount variable in a broader scope
+                                var deduction; // Define deduction variable in a broader scope
+
+                                // Function to update the Amount input based on the selected option
+                                function updateAmount(selectedOption) {
+                                    // Get the value of the selected option
+                                    var selectedValue = $(selectedOption).val();
+
+                                    // Set the value of the Amount input based on the selected option
+                                    if (selectedValue === 'Investment Wallet') {
+                                        amount = responseData.wallet_investment;
+                                        deduction = 50;
+                                    } else if (selectedValue === 'ROI Wallet') {
+                                        amount = responseData.wallet_roi;
+                                        deduction = 15;
+                                    } else if (selectedValue === 'Comission Wallet') {
+                                        amount = responseData.wallet_commission;
+                                        deduction = 15;
+                                    }
+
+                                    $('#Amount').val(amount);
+
+                                    // Event listener for changes in the withdrawal amount input
+                                    $('#withdrawal_amount').keyup(function () {
+                                        updateDeductions();
+                                    });
+                                }
+
+                                function updateDeductions() {
+                                    // Get the withdrawal amount
+                                    var withdrawalAmount = parseFloat($('#withdrawal_amount').val());
+
+                                    if (withdrawalAmount > amount) {
+                                        alert('Withdrawal amount cannot exceed available balance.');
+                                        return; // Exit the function
+                                    }
+
+                                    // Calculate deductedAmount
+                                    var deductedAmount = withdrawalAmount * deduction / 100;
+
+                                    // Set Deduction input value
+                                    $('#Deduction').val(deductedAmount);
+
+                                    // Calculate Net Amount
+                                    var netAmount = withdrawalAmount - deductedAmount;
+                                    $('#Net_Amount').val(netAmount);
+
+                                    var balanceAmount = amount-withdrawalAmount;
+                                    $('#Balance_Amount').val(balanceAmount);
+                                }
+
+                                // Event listener for changes in the select box
+                                $('#Wallet_Type').change(function() {
+                                    // Call the updateAmount function with the selected option
+                                    updateAmount(this);
+                                });
+
+                                $('#user_id').keyup(function () {
+                                    var user_id = $(this).val();
+                                    if (user_id.length === 6) {
+                                        // AJAX request
+                                        $.ajax({
+                                            url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
+                                            type: 'post',
+                                            data: {
+                                                action: 'user_details', // Action to call user_details function
+                                                user_id: user_id
+                                            },
+                                            success: function (response) {
+                                                // Handle response from server
+                                                console.log(response);
+
+                                                // Assuming response is the JSON array you received
+                                                responseData = response[0]; // Assign responseData
+                                                // Set the value of the input box to the value of the "name" field in the response object
+                                                $('#user_name').val(responseData.name);
+
+                                                // Call the updateAmount function with the selected option
+                                                updateAmount($('#Wallet_Type').get(0));
+                                            },
+                                            error: function (xhr, status, error) {
+                                                // Handle errors
+                                                console.error(xhr.responseText);
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                            </script>
+
+
+                                    <script>
+
+                                    $('#submit_withdrawal_button').click(function () {
+
+                                        $('.err_mess').text('');
+                                        var formData = $('#submit_withdrawal').serialize();
+                                        console.log(formData);
+                                        // return false();
+
+                                        var user_id = $('#user_id').val();
+                                        if (user_id === "") {
+                                            $('#user_id_err').text('User ID can not be blank.');
+                                            return false();
+                                        }
+
+                                        var withdrawal_amount = $('#withdrawal_amount').val();
+                                        if( withdrawal_amount == ''){
+                                            $('#withdrawal_amount_err').text('withdrawal_amount can not be blank.');
+                                            return false();
+                                        }
+
+                                     
+                                
+                                        $.ajax({
+                                            url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
+                                            type: 'post',
+                                            data: {
+                                                do_action: 'do_action', // Action to call user_details function
+                                                formData: formData
+                                            },
+                                            success: function (response) {
+                                                // Handle response from server
+                                                console.log(response.message); 
+                                                if(response.message){
+
+                                                    showNotif("Withdrawal request submitted successfully.","success");
+                                                    // $('#success_message').text(response.message)
+                                                    //                     .css('padding', '15px');
+                                                    $('#submit_withdrawal')[0].reset();
+
+                                                }
+
+			
+        
+                                         
+                                            },
+                                            error: function (xhr, status, error) {
+                                                // Handle errors
+                                                console.error(xhr.responseText);
+                                            }
+                                        });
+                                    
+                                   });
+
+                                 </script>
+ 
+                        </Body>
+                        </html>
