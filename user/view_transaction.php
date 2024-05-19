@@ -166,7 +166,7 @@
                                                             foreach ($transactions as $item) {
                                                                 $i++;
                                                                 $txn_type = $item['transaction_type'];
-                                                                $level = $item['level'];
+                                                                     $level = $item['level'];
                                                                 $user_id = $item['user_id'];
                                                                 $from_user_id = $item['from_user_id'];
                                                                 $transaction_amount = $item['transaction_amount'];

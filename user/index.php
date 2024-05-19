@@ -270,6 +270,30 @@
     $res = mysqli_fetch_array($query);
     extract($res);
     $today_income += $today_transaction;
+
+    $query_total_income = "SELECT
+    SUM(transaction_amount) AS total_amount
+FROM
+    wallet_transaction w
+WHERE
+    w.user_id = $user_id";
+
+
+$query = mysqli_query($conn, $query_total_income);
+$res = mysqli_fetch_assoc($query);
+
+// Sum of total withdrawal amount, total wallet commission, and total wallet roi
+$total_income = $res['total_amount'];
+
+
+
+
+
+
+
+
+  
+    // die();
     
     $active_percent = $inactive_percent = 0;
     $self_invest_percent = $super_invest_percent = 0;
@@ -823,18 +847,31 @@ $total_tds = $row['total_tds'];
                             <div class="card pb-0 o-hidden earning-card">
                                 <div class="card-header earning-back"></div>
                                 <div class="card-body p-1">
-                                    <div class="earning-content pt-2">
-                                        <!-- <img class="img-fluid" src="assets/images/avatar.jpg" alt=""> -->
-                                        <img src="<?php echo $user_profile; ?>" alt="" style="width:90px; height:90px; border-radius:50%; z-index:999 !important; position:relative;" class="img-fluid shadow">
-                                        <a class="" href="view_investment.php">
-                                            <h4>Today's Earning</h4>
-                                        </a>
-                                        <span class="d-none">(Mon 15 - Sun 21)</span>
-                                    <h6 class="">
-                                        ₹ <?php echo number_format($today_income,2); ?>                                        
-                                    </h6>
-                                    <div id="earning-chart" class="d-none"></div>
+                                <div class="earning-content pt-2">
+                                    <img src="<?php echo $user_profile; ?>" alt="" style="width:90px; height:90px; border-radius:50%; z-index:999 !important; position:relative;" class="img-fluid shadow">
+                                    <div style="display:flex; justify-content: space-between;">
+                                        <!-- Today's Earning -->
+                                        <div style="flex: 1;">
+                                            <a class="" href="view_investment.php">
+                                                <h4>Today's Income</h4>
+                                            </a>
+                                            <span class="d-none">(Mon 15 - Sun 21)</span>
+                                            <h6 class="">₹ <?php echo number_format($today_income, 2); ?></h6>
+                                            <div id="earning-chart" class="d-none"></div>
+                                        </div>
+                                        <!-- Total Earning -->
+                                        <div style="flex: 1;">
+                                            <a class="" href="view_investment.php">
+                                                <h4>Total Income</h4>
+                                            </a>
+                                            <span class="d-none">(Mon 15 - Sun 21)</span>
+                                            <h6 class="">₹ <?php echo number_format($total_income, 2); ?></h6> <!-- Assuming you have a variable $total_income -->
+                                            <div id="total-earning-chart" class="d-none"></div>
+                                        </div>
                                     </div>
+                                </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -1286,7 +1323,8 @@ $total_tds = $row['total_tds'];
                                             <div class="media-body">
                                                 <h6 class="font-roboto">Withdrawal</h6>
                                                 <h4 class="mb-0 counter">
-                                                    ₹ <?php echo $total_withdrawal_amount  ?>
+                                                
+                                                    ₹ <?php echo number_format($total_withdrawal_amount, 2);  ?>
                                                     <a class="pull-right me-5 badge badge-secondary shadow text-bold" href="view_withdrawal.php">
                                                         <i class="icofont icofont-eye"></i>
                                                         View Txn
@@ -1350,7 +1388,8 @@ $total_tds = $row['total_tds'];
                                             <div class="media-body">
                                                 <h6 class="font-roboto">Amount in TDS wallet</h6>
                                                 <h4 class="mb-0 counter">
-                                                    ₹ <?php echo $total_tds ?>
+                                               
+                                                    ₹ <?php echo number_format($total_tds, 2); ?>
                                                     <a class="pull-right me-5 badge badge-success shadow text-bold" href="tds-history.php?type=<?php echo base64_encode(json_encode('roi')); ?>">
                                                         <i class="icofont icofont-eye"></i>
                                                         View Txn

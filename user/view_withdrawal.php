@@ -377,14 +377,19 @@
                                                 <h5 class="card-title mb-1 text-bold"><?php echo $header_text; ?></h5>
                                                 <p class="d-flex justify-content-start align-items-center" style="flex-wrap: wrap;">
                                                     <?php
-                                                        if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 16)) {
+                                                    // $kyc_done = 0;
+                                                    // $current_date2 = 16;
+                                                    //   $current_datetimestart = 13;
+                                                   
+
+                                                        if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
                                                             ?>
                                                                 <a class='mt-3 btn btn-primary btn-sm text-white show-pointer' href="view_profile.php" onclick="return confirm('Complete Your KYC First!');">
                                                                     <i class="icofont icofont-money"></i> Request for ROI Withdrawal
                                                                 </a>
                                                             <?php
                                                         } else {
-                                                            if (($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 16)) {
+                                                            if (($current_date2 == 1) || ($current_date2 == 16) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
                                                                 ?>
                                                                     <a class='mt-3 btn btn-primary btn-sm text-white show-pointer' data-bs-toggle='modal' data-bs-target='#ModalPay' data-payment='' data-beneficiary='COMPANY' data-transaction_type="fresh" id="btn_pay"> 
                                                     <i class="icofont icofont-money"></i> Request for ROI Withdrawal
@@ -401,14 +406,14 @@
                                                     &nbsp;
                                                     &nbsp;
                                                       <?php
-                                                        if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 16)) {
+                                                        if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
                                                             ?>
                                                                 <a class='mt-3 btn btn-primary btn-sm text-white show-pointer' href="view_profile.php" onclick="return confirm('Complete Your KYC First!');">
                                                                     <i class="icofont icofont-money"></i> Request for Commission Withdrawal
                                                                 </a>
                                                             <?php
                                                         } else {
-                                                            if (($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 16)) {
+                                                            if (($current_date2 == 1) || ($current_date2 == 16) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
                                                                 ?>
                                                                     <a class='mt-3 btn btn-primary btn-sm text-white show-pointer' data-bs-toggle='modal' data-bs-target='#ModalPayCommission' data-payment='' data-beneficiary='COMPANY' data-transaction_type="fresh" id="btn_pay"> 
                                                                         <i class="icofont icofont-money"></i> Request for Commission Withdrawal 
@@ -796,7 +801,7 @@
             var admin_charges = document.getElementById("admin_charges");
             var tds_charges = document.getElementById("tds_charges");
             var total_withdrawal_amount = document.getElementById("total_withdrawal_amount");
-            var allowedwithdrawalamount= '<?php echo $allowedwithdrawalamount; ?>';
+            var allowedwithdrawalamount= (fund_available * 2.5 )/ 100;
             var agree = document.getElementById("agree");
             
             var wallet_investment = +<?php echo $wallet_investment; ?>;
@@ -845,7 +850,7 @@
 
             if (withdrawal_amount_value_trim > allowedwithdrawalamount) {
                 withdrawal_amount.focus();
-                err_msg = "***As per your Limit you can max withdraw only <i>Rs."+allowedwithdrawalamount+"  (You can withdraw only 20% of your previous month's investment amount or your first level business.)</i>***";
+               err_msg = "***As per your Limit you can max withdraw only <i>Rs."+allowedwithdrawalamount+"  (You can withdraw only 2.5% of your available amount in ROI wallet.)</i>***";
                 msg_error.innerHTML = err_msg;
                 show_element(msg_error);
                 return

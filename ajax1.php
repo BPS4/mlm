@@ -770,7 +770,7 @@ if (!(($current_date2 == 1 || $current_date2 == 16) && ($current_datetimestart >
 
             if ($wallet_investment > 0) {
                 $value_insert .= "('wallet_investment', '$user_id', '$remaining_balance', '$tds', '$service_charge', '$net_amount', '1', '$current_date'),";
-                $query_invest = "INSERT INTO `fund_transaction`(`transaction_type`, `user_id`, `transaction_mode`, `transaction_amount`, `transaction_id`, `status`, `create_date`) VALUES ('withdraw', '$user_id', '1', '$remaining_balance', 'superwallet-withdraw', '1', '$current_date')";
+                $query_invest = "INSERT INTO ``(`transaction_type`, `user_id`, `transaction_mode`, `transaction_amount`, `transaction_id`, `status`, `create_date`) VALUES ('withdraw', '$user_id', '1', '$remaining_balance', 'superwallet-withdraw', '1', '$current_date')";
             }
         }
 

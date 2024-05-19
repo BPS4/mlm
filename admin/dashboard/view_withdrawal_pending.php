@@ -269,7 +269,7 @@
 															$mobile = $row['mobile'];
 															$pan = $row['pan'];
 															//$withdrawal_amount = $row['withdrawal_amount'];
-															$withdrawal_amount =  $row['withdrawal_amount'];
+															$withdrawal_amount = $row['total_withdraw'] ?? $row['withdrawal_amount'];
 															$bank_name = $row['bank_name'];
 															$branch_name = $row['branch_name'];
 															$account_no = $row['account_no'];
