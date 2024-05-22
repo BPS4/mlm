@@ -529,7 +529,7 @@
                                         //     data = data.replace( /<br\s*\/?>/ig, ";" );
                                         // }
 									// EXCEL EXPORT NUMBER MORE THAN 15 DIGITS (LAST DIGIT 0) >> ISSUE SOLVED BY CONVERTING NO. TO STRING
-										data = '\u200C' + data; //will cast the number to string.
+										// data = '\u200C' + data; //will cast the number to string.
 									// EXCEL EXPORT NUMBER MORE THAN 15 DIGITS (LAST DIGIT 0) >> ISSUE SOLVED BY CONVERTING NO. TO STRING
 									data = data.replace(/^\s+|\s+$/gm,'');
                                     return data

@@ -56,6 +56,8 @@
 	// check login status
 
     // CHECK AVAILABILITY
+    // echo base64_decode($_GET['type']);
+    // die();
         if (isset($_GET['type'])) {
             $type = json_decode(base64_decode($_GET['type']));    //--DECODE THE SECRET CODE PASSED--//
             $type_encode = base64_encode(json_encode($type));     //ENCODE
@@ -95,10 +97,11 @@
         } else {
             $position = 7;
             
-            $check_type = "`transaction_type` IN ('sponsor_commission','level_commission','roi') AND ";
+            $check_type = "`transaction_type` IN ('sponsor_commission','level_commission','roi','superwallet') AND ";
 
             $header_text = "Transaction Summary For All Income";
         }
+     
     // CHECK AVAILABILITY
 
     // $check_type = "";
@@ -112,9 +115,32 @@
 	// DEFAULT
 
     // GET DATA
-        $query = "SELECT `transaction_type`, `level`, `user_id`, IF(`transaction_type`='roi',`user_id`,`from_user_id`) AS 'from_user_id', `transaction_amount`, `create_date` FROM `wallet_transaction` WHERE $check_type `user_id`='$user_id' AND `status`=1 ORDER BY `create_date` DESC";
-        $res = mysqli_query($conn,$query);
-        $transactions = mysqli_fetch_all($res,MYSQLI_ASSOC);
+        // $query = "SELECT `transaction_type`, `level`, `user_id`, IF(`transaction_type`='roi',`user_id`,`from_user_id`) AS 'from_user_id', `transaction_amount`, `create_date` FROM `wallet_transaction` WHERE $check_type `user_id`='$user_id' AND `status`=1 ORDER BY `create_date` DESC";
+        // $res = mysqli_query($conn,$query);
+        // $transactions = mysqli_fetch_all($res,MYSQLI_ASSOC);
+
+        $query = "
+    SELECT 
+        `transaction_type`, 
+        `level`, 
+        `user_id`, 
+        IF(`transaction_type`='roi', `user_id`, `from_user_id`) AS 'from_user_id', 
+        `transaction_amount`, 
+        `create_date` 
+    FROM 
+        `wallet_transaction` 
+    WHERE 
+        $check_type 
+        `user_id` = '$user_id' 
+        AND `status` = 1 
+        AND `create_date` >= DATE_SUB(NOW(), INTERVAL 30 DAY) 
+    ORDER BY 
+        `create_date` DESC
+";
+$res = mysqli_query($conn, $query);
+$transactions = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+
     // GET DATA
 
     // DEFAULT ORDER COLUMN SR
@@ -162,9 +188,12 @@
                                                     </thead>
                                                     <tbody>
                                                         <?php
+                                                        
                                                             $i = 0;
+                                                            
                                                             foreach ($transactions as $item) {
                                                                 $i++;
+                                                                
                                                                 $txn_type = $item['transaction_type'];
                                                                      $level = $item['level'];
                                                                 $user_id = $item['user_id'];
@@ -193,11 +222,15 @@
 
                                                                 // } else 
                                                                 // if ($txn_type != "roi")
+                                                                
                                                                 {
-                                                                    $query = "SELECT `users`.`name` AS 'member_name' FROM `users` WHERE `users`.`user_id`='$from_user_id'";
-                                                                    $res = mysqli_query($conn,$query);
-                                                                    $res = mysqli_fetch_array($res);
-                                                                    extract($res);
+                                                                    if (is_numeric($from_user_id)) {
+                                                                        $query = "SELECT `users`.`name` AS 'member_name' FROM `users` WHERE `users`.`user_id`='$from_user_id'";
+                                                                        $res = mysqli_query($conn,$query);
+                                                                        $res = mysqli_fetch_array($res);
+                                                                        extract($res);
+                                                                    }
+                                                                    
                                                                 }
 
                                                                 switch ($txn_type) {
@@ -212,14 +245,26 @@
                                                                     case 'roi':
                                                                         $transaction_type = "<span class='badge bg-info rounded'>ROI Income</span>";
                                                                         break;
+
+                                                                    case 'superwallet':
+                                                                        $transaction_type = "<span class='badge bg-info rounded'>superwallet</span>";
+                                                                        break;
                                                                 }
 
                                                                 ?>
                                                                     <tr>
                                                                         <td><?php echo $i; ?></td>
                                                                         <!-- <td><?php echo $user_id; ?></td> -->
-                                                                        <td><?php echo $from_user_id; ?></td>
-                                                                        <td class="no-wrap"><?php echo $member_name; ?></td>
+                                                                        <td><?php if(is_numeric($from_user_id)){echo $from_user_id; }
+                                                                        else{
+                                                                            echo 'superwallet';
+                                                                        }?></td>
+                                                                        <td class="no-wrap"><?php 
+                                                                       if(is_numeric($from_user_id)){echo $member_name; }
+                                                                       else{
+                                                                           echo 'NULL';
+                                                                       }
+                                                                        ?></td>
                                                                         <td><?php echo $transaction_type; ?></td>
                                                                         <td>₹ <?php echo number_format($transaction_amount,2); ?></td>
                                                                         <td><?php echo $create_date; ?></td>

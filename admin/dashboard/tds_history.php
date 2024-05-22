@@ -51,7 +51,7 @@
 		}
 	// check login status
 
-	$header = "Withdrawal Requests Pending For Approval";
+	$header = "All User TDS";
 
 	// DEFAULT
 		$page_id_home = 1;
@@ -68,16 +68,37 @@
 	
 	// GET TRANSACTION
 		// FOR SELECT QUERIES
-			$query_transaction = "SELECT `withdrawal`.`id`, `withdrawal`.`user_id`, `withdrawal`.`from_wallet`, `withdrawal`.`total_withdraw`, `withdrawal`.`withdrawal_amount`, `withdrawal`.`status`, `withdrawal`.`comment`, `withdrawal`.`create_date`,`users`.`name`,`users`.`mobile`,`users`.`email`,`users`.`pan`,`users`.`bank_name`,`users`.`branch_name`,`users`.`account_no`,`users`.`ifs_code` FROM `withdrawal` LEFT JOIN `users` ON `users`.`user_id`=`withdrawal`.`user_id`
-
-			WHERE `withdrawal`.`status`='pending' ORDER BY `withdrawal`.`create_date` DESC";
+			$query_transaction = "SELECT `withdrawal`.`id`, `withdrawal`.`user_id`,  `withdrawal`.`total_withdraw`, `withdrawal`.`withdrawal_amount`, `withdrawal`.`status`, `withdrawal`.`comment`, `withdrawal`.`create_date`,`users`.`name`,`users`.`mobile`,`users`.`email`,`users`.`pan`,`users`.`bank_name`,`users`.`branch_name`,`users`.`account_no`,`users`.`ifs_code` FROM `withdrawal` LEFT JOIN `users` ON `users`.`user_id`=`withdrawal`.`user_id` WHERE 1 ORDER BY `withdrawal`.`create_date` DESC";
 			$query_transaction = mysqli_query($conn, $query_transaction);
 			// FETCH ALL DATA
 			$records = mysqli_fetch_all($query_transaction,MYSQLI_ASSOC);
 			$count_available_txn = mysqli_num_rows($query_transaction);
 	// GET TRANSACTION
 	
-	$total_count = mysqli_num_rows($query_transaction);
+	// $total_count = mysqli_num_rows($query_transaction);
+	// // USED FOR CENTER THE TEXT PDF EXPORT
+	// 	echo "<input type='hidden' id='total_count' value='$total_count'>";
+	
+	// // DEFAULT ORDER COLUMN SR
+	// 	$default_Order = 0;
+
+	// // LENGTH MENU
+    // 	$length_menu = "all";
+
+    $query = "
+    SELECT w.*, u.name, u.pan 
+    FROM `withdrawal` w
+    JOIN `users` u ON w.user_id = u.user_id
+    WHERE w.status='Approved' and  w.create_date >= '2024-03-01'
+    ORDER BY w.create_date DESC
+";
+        $res = mysqli_query($conn,$query);
+        $transactions = mysqli_fetch_all($res,MYSQLI_ASSOC);
+
+        // print_r($transactions);
+        // die();
+
+        $total_count = mysqli_num_rows($res);
 	// USED FOR CENTER THE TEXT PDF EXPORT
 		echo "<input type='hidden' id='total_count' value='$total_count'>";
 	
@@ -86,6 +107,10 @@
 
 	// LENGTH MENU
     	$length_menu = "all";
+
+
+
+
 ?>
 
 	<head>
@@ -93,7 +118,7 @@
 
 		<title><?php echo $header; ?> - Admin Dashboard - Maxizone - <?php echo "$current_date" ?></title>
 
-		<link rel="canonical" href="view_withdrawal_pending.php">
+		<link rel="canonical" href="view_transaction.php">
 
 		<style>
 			input[type="checkbox"],#check_all {
@@ -167,6 +192,7 @@
 	</head>
 
 	<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
+      
 		<div class="wrapper">
 			<?php include("sidebar.php"); ?>
 
@@ -213,160 +239,78 @@
 											New Customer
 										</button> -->
 									</div>
-									<div class="card-body" style="padding:0.5rem;">
+									<div class="card-body" style="padding:0.5rem;">										
 										<form action="" method="post" id="formChoiceAllot">
 											<table id="datatables" class="table table-striped" style="width:100%">
 												<colgroup>
-													<!-- <col width="5%">
-													<col width="10%">
-													<col width="5%">
-													<col width="10%">
-													<col width="5%">
-													<col width="5%">
-													<col width="15%">
-													<col width="15%">
-													<col width="15%">
-													<col width="5%">
-													<col width="5%">
-													<col width="5%"> -->
+													
 												</colgroup>
 												<thead>
-													<tr>
-														<th>Sr</th>
-														<th class="no_print">
-															<input class="d-none" type="checkbox" id="check_all" name="approve_all" value="approve_all">
-															<label class="d-none" for="check_all">Approve All</label>
-															Action
-														</th>
-														<th style="white-space: nowrap;">User ID</th>
-														<th>Name</th>
-														<th>PAN</th>
-														<th>Mobile</th>
-														<th>Transaction For</th>
-														<th>Payable Amount</th>
-														<th>Withdrawal Wallet</th>
-														<th>Bank</th>
-														<th>Branch</th>
-														<th>A/c No.</th>
-														<th>IFSC Code</th>
-														<th>Transaction Date</th>
-													</tr>
+													 <tr>
+                                                            <th class="has-html text-center">Sr</th>
+                                                            <th class="has-html text-center">User Id</th>
+                                                            <th class="has-html text-center">Name</th>
+                                                            <th class="has-html text-center">Pan No.</th>
+                                                            <th class="has-html text-center">Transaction Date</th>
+                                                            <th class="has-html text-center">TDS Amount</th>
+                                                        </tr>
 												</thead>
 												<tbody id="tableBody">
-													<?php
-													$i = 0;
-													foreach ($records as $row) {
-														$i++;
-														//DEFAULT VALUES SET
-															$class_center = "has-html text-center";
+                                                <?php
+                                                            $i = 0;
+                                                            // print_r($transactions);
+                                                            foreach ($transactions as $item) {
+                                                                $i++;
+                                                                $class_center = "has-html text-center";
+                                                                $user_id = $item['user_id'];
+                                                                $withdrawal_amount = $item['withdrawal_amount'];
+                                                                $name = $item['name'];
+                                                                $pan = $item['pan'];
+                                                                
+                                                                $tds = $item['tds'];
+                                                             
+                                                                $create_date = $item['create_date'];
+                                                                
+                                                                // CHECK DATE FOR YYYY-MM-DD OR YYYY-MM-DD hh:ii:ss FORMAT
+                                                                    $regEx = '/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/';
+                                                                    // preg_match($regEx, $details['date'], $result);
+                                                                    if (preg_match($regEx, $create_date) || preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $create_date)) {
+                                                                        $date = date_create($create_date);
+                                                                        $create_date = date_format($date, "d-M-Y h:iA");
+                                                                        $create_date = date_format($date, "d-M-Y");
+                                                                    }
+                                                                // CHECK DATE FOR YYYY-MM-DD OR YYYY-MM-DD hh:ii:ss FORMAT
 
-														// DATA
-															$id_member = $row['id'];
-															$id_member_encode = base64_encode(json_encode($id_member));     //ENCODE
-															$user_id_member = $row['user_id'];
-															$name_member = $row['name'];
-															$email = $row['email'];
-															$mobile = $row['mobile'];
-															$pan = $row['pan'];
-															//$withdrawal_amount = $row['withdrawal_amount'];
-															$withdrawal_amount = $row['total_withdraw'] ?? $row['withdrawal_amount'];
-															$bank_name = $row['bank_name'];
-															$branch_name = $row['branch_name'];
-															$account_no = $row['account_no'];
-															$ifs_code = $row['ifs_code'];
-															$status = $row['status'];
-															$create_date = $row['create_date'];
-															$from_wallet = $row['from_wallet'];
-														// DATA
+                                                              
 
-                                                        $user_txn_for = "WITHDRAWAL";
-                                                        $class_txn = "success";
-														
-														//CHECK DATE FOR YYYY-MM-DD OR YYYY-MM-DD hh:ii:ss FORMAT
-															$regEx = '/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/';
-															// preg_match($regEx, $details['date'], $result);
-															if (preg_match($regEx, $create_date) || preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $create_date)) {
-																$create_date = date_create($create_date);
-																$create_date = date_format($create_date, "d M Y h:ia");
-															}
-														//CHECK DATE FOR YYYY-MM-DD OR YYYY-MM-DD hh:ii:ss FORMAT
-
-														?>
-															<!-- REPEAT ITEM -->
-															<tr>
-																<td class="text-center"><?php echo $i; ?></td>
-																<td class="no_print text-center">
-																	<?php
-																		if ($status!='approved') {
-																			?>
-																				<!-- <input type="hidden" name="approve_transaction[<?php echo $id_member;?>]" value=""> -->
-																				<!-- <input type="checkbox" id="approve_transaction_<?php echo $id_member;?>" name="approve_transaction[]" class="checkSingle" value="<?php echo $id_member;?>">
-																				<label for="approve_transaction_<?php echo $id_member;?>"><?php echo $user_id_member;?></label> -->
-																				<!-- <a target='_blank' href='print_relieving.php?id_member=<?php echo $id_member_encode; ?>' class='badge' style='background:#E07C24;margin-top:5px;margin-bottom:5px;' >
-																					<i class="align-middle" data-feather="printer"></i>  Approve
-																				</a> -->
-
-																				<!-- <span class='badge bg-success rounded-pill show-pointer' style="background: #E07C24 !important;" data-bs-toggle="modal" data-bs-target="#ModalAction">Approve</span> -->
-																				<span class='badge bg-success rounded-pill show-pointer' style="background: #E07C24 !important;" data-bs-toggle="modal" data-bs-target="#ModalAction" data-id="<?php echo $id_member; ?>" data-user_id="<?php echo $user_id_member; ?>" data-amount_withdrawal="<?php echo $withdrawal_amount;?>"  data-from_wallet="<?php echo $from_wallet;?>">Action</span>
-
-																				<!-- <span class='badge bg-danger rounded-pill show-pointer' style="background: #6A1B4D !important;">Reject</span> -->
-
-																			<?php
-																		} else {
-																			?>
-																				<span class='badge bg-danger rounded-pill' style="background: #6A1B4D !important;">Approved</span>
-																			<?php
-																		}
-																	?>
-																</td>
-																<td class="has-html text-center">
-																	<span>
-																		<?php echo $user_id_member; ?>
-																		<input type="hidden" id="txn_user_<?php echo $id_member;?>" name="txn_user_id_member[]" class="" value="<?php echo $user_id_member;?>">
-																	</span>
-																</td>
-																<td class="text-start"><?php echo $name_member; ?></td>
-																<td class="text-center"><?php echo $pan; ?></td>
-																<td class="text-center"><?php echo $mobile; ?></td>
-																<td class="has-html text-center" onclick='copyToClipboard("<?php echo "$user_txn_for"; ?>")' style="cursor:pointer;" title='Click to copy'>
-																	<span class="badge bg-<?php echo $class_txn; ?> text-uppercase" style="white-space: normal;">
-																		<?php echo $user_txn_for; ?>
-																	</span>
-																</td>
-																<td class="has-html text-center"><span class="badge bg-success" style="white-space: normal;"><?php echo $withdrawal_amount; ?></span></td>
-																
-																<td class="text-start"><?php echo $from_wallet; ?></td>
-																<td class="text-start"><?php echo $bank_name; ?></td>
-																<td class="text-start"><?php echo $branch_name; ?></td>
-																<td class="has-html text-start"><span><?php echo $account_no; ?></span></td>
-																<td class="text-start"><?php echo $ifs_code; ?></td>
-																<td class="text-center"><?php echo $create_date; ?></td>
-															</tr>
-
-														<?php
-													}
-													?>
+                                                                ?>
+                                                                    <tr class="no-wrap">
+                                                                        <td class="has-html text-center"><?php echo $i; ?></td>
+                                                                        
+                                                                        <td class="has-html text-center"><?php echo $user_id; ?></td>   
+                                                                        <td class="has-html text-center">
+                                                                            <?php echo $name; ?>
+                                                                        </td> 
+                                                                        <td class="has-html text-center">
+                                                                            <?php echo $pan; ?>
+                                                                        </td>                                                                     
+                                                                        <td class="has-html text-center"><?php echo $create_date; ?></td>
+                                                                        <td class="has-html text-center"><span class="badge bg-success" style="white-space: normal;"><?php echo number_format($item['tds'],2); ?></span></td>
+                                                                    </tr>
+                                                                <?php
+                                                            }
+                                                        ?>    
 												</tbody>
 												<tfoot class="no_print">
-													<tr>
-														<th>Sr</th>
-														<th class="no_print">
-															<input class="d-none" type="checkbox" id="check_all" name="approve_all" value="approve_all">
-															<label class="d-none" for="check_all">Approve All</label>
-															Action
-														</th>
-														<th style="white-space: nowrap;">User ID</th>
-														<th>Name</th>
-														<th>PAN</th>
-														<th>Mobile</th>
-														<th>Transaction For</th>
-														<th>Payable Amount</th>
-														<th>Bank</th>
-														<th>Branch</th>
-														<th>A/c No.</th>
-														<th>IFSC Code</th>
-														<th>Transaction Date</th>
-													</tr>
+													 <tr>
+                                                            <th class="has-html text-center">Sr</th>
+                                                          
+                                                            <th class="has-html text-center">User Id</th>
+                                                            <th class="has-html text-center">Name</th>
+                                                            <th class="has-html text-center">Pan No.</th>
+                                                            <th class="has-html text-center">Transaction Date</th>
+                                                            <th class="has-html text-center">TDS Amount</th>
+                                                        </tr>
 												</tfoot>
 											</table>
 										</form>
@@ -398,7 +342,6 @@
 								<input type="hidden" id="id_withdrawal">
 								<input type="hidden" id="id_user">
 								<input type="hidden" id="amount_withdrawal">
-								<input type="hidden" id="from_wallet">
 								<div class="mb-3 col-md-12">
 									<label for="select_action" class="text-bold">Select Action To Perform</label>
 									<select name="" id="select_action" class="form-control" onchange="toggle_comment();">
@@ -544,16 +487,6 @@
                                 }
                             }
                     },
-
-					// EXCEL EXPORT NUMBER MORE THAN 15 DIGITS (LAST DIGIT 0) >> ISSUE SOLVED BY CONVERTING NO. TO STRING
-						customizeData: function (data) {
-							var ind = data.header.indexOf("A/c No."); // This code is to find the column name's index which you want to cast.
-							for (var i = 0; i < data.body.length; i++) {
-								data.body[i][ind] = '\u200C' + data.body[i][ind]; //will cast the number to string.
-							}
-						},
-					// EXCEL EXPORT NUMBER MORE THAN 15 DIGITS (LAST DIGIT 0) >> ISSUE SOLVED BY CONVERTING NO. TO STRING
-
                     key: { // press E for export EXCEL
                         key: 'e',
                         altKey: false
@@ -891,9 +824,9 @@
             table.columns().every(function () {
                 var that = this;
                 $('input', this.footer()).on('keyup change clear', function () {
-                    // if (that.search() !== this.value) {
-                    //     that.search(this.value).draw();
-                    // }
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
                 });
             });
         });
@@ -919,14 +852,12 @@
 				reject_comment.setAttribute('required','false');
 			}
 		}
-
 		function process_withdrawal() {
 			var action = "process_withdrawal";
 			var select_action = document.getElementById("select_action");
 			var reject_comment = document.getElementById("reject_comment");
 			var id_withdrawal = document.getElementById("id_withdrawal");
 			var amount_withdrawal = document.getElementById("amount_withdrawal");
-			var from_wallet = document.getElementById("from_wallet");
 			var id_user = document.getElementById("id_user");
 
 			if (select_action.value == "") {
@@ -951,8 +882,7 @@
 					id_withdrawal: id_withdrawal.value,
 					amount_withdrawal: amount_withdrawal.value,
 					action_to_perform: select_action.value,
-					reject_comment: reject_comment.value,
-					from_wallet: from_wallet.value
+					reject_comment: reject_comment.value
 				},
 				
 				// data: $("#form_register").serialize() + "&action=" +action , // getting filed value in serialize form And Passing additional Value of 'action' To perform Task Accordingly
@@ -1003,32 +933,7 @@
 			});
 		}
 
-		// PASS DATA TO MODAL POPUP
-            $(function () {
-                $('#ModalAction').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var id = button.data('id'); // Extract info from data-* attributes
-                    var id_user = button.data('user_id'); // Extract info from data-* attributes
-                    var amount_withdrawal = button.data('amount_withdrawal'); // Extract info from data-* attributes
-                    var from_wallet = button.data('from_wallet'); // Extract info from data-* attributes
-                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-					// package = "Package "+package;
-					// payment = "20% Amount of "+package+"= Rs."+payment;
-                    var modal = $(this);
-                    // modal.find(id).val(src);
-                    // modal.find('#image').src=src;
-					document.getElementById("id_withdrawal").value = id;
-					document.getElementById("id_user").value = id_user;
-					document.getElementById("amount_withdrawal").value = amount_withdrawal;
-					document.getElementById("from_wallet").value = from_wallet;
-                });
-            });
-        // PASS DATA TO MODAL POPUP
-	</script>
-
-	<script>
-        function callAjaxMemberName() {
+		function callAjaxMemberName() {
 			var action = "get_sponsor";
 			var sponsor_id = document.getElementById("member_user_id");
 			var sponsor_name = document.getElementById("member_name");
@@ -1081,6 +986,29 @@
 				}
 			});
 		}
+	</script>
+
+	<script>
+        // PASS DATA TO MODAL POPUP
+            $(function () {
+                $('#ModalAction').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var id = button.data('id'); // Extract info from data-* attributes
+                    var id_user = button.data('user_id'); // Extract info from data-* attributes
+                    var amount_withdrawal = button.data('amount_withdrawal'); // Extract info from data-* attributes
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+					// package = "Package "+package;
+					// payment = "20% Amount of "+package+"= Rs."+payment;
+                    var modal = $(this);
+                    // modal.find(id).val(src);
+                    // modal.find('#image').src=src;
+					document.getElementById("id_withdrawal").value = id;
+					document.getElementById("id_user").value = id_user;
+					document.getElementById("amount_withdrawal").value = amount_withdrawal;
+                });
+            });
+        // PASS DATA TO MODAL POPUP
     </script>
 
 	<?php
