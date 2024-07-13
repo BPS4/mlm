@@ -236,7 +236,7 @@
                                     <div class="row g-4 mb-4 align-items-center">
                                         <div class="card px-1">
                                           
-                                            <div class="card-datatable table-responsive">
+                                            <div class="card-datatable t.able-responsive">
                                                 <table id="datatables" class="datatables table border-top table-strriped table-info table-hover border-primary">
                                                     <thead>
                                                         <tr>
