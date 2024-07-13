@@ -84,7 +84,7 @@ $admin_charges_commission = 0;
 
 
     // GET DATA
-        $query = "SELECT * FROM `withdrawal` WHERE `user_id`='$user_id' and create_date >= '2024-03-01' ORDER BY `create_date` DESC";
+        $query = "SELECT * FROM `withdrawal` WHERE `user_id`='$user_id' and create_date >= '2024-04-01' ORDER BY `create_date` DESC";
         $res = mysqli_query($conn,$query);
         $transactions = mysqli_fetch_all($res,MYSQLI_ASSOC);
         // print_r($transactions);

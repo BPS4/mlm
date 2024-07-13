@@ -92,12 +92,14 @@
 
             if ($type == "inactive") {
                 $header = "Blocked Members List";
-			    $check_status = "`status`='$type'";
+			    $check_status = "`kyc_status`='$type'";
             }
+
+            
 
             if ($type == "kyc") {
                 $header = "KYC Pending For Approval";
-			    // $check_status = "`status`='active'";
+			    $check_status = "`kyc_status`='pending'";
             }
 
             if ($type == "kyc_done") {
@@ -139,7 +141,7 @@
     $query = mysqli_query($conn, $query);
     $members = mysqli_fetch_all($query, MYSQLI_ASSOC);
     $total_count = mysqli_num_rows($query);
-
+    
     // USED FOR CENTER THE TEXT PDF EXPORT
     echo "<input type='hidden' id='total_count' value='$total_count'>";
 
@@ -263,6 +265,8 @@
                                             $disabled_option1 = $disabled_option2 = $disabled_option3 = $disabled_option4 = $disabled_option5 = "";
                                             $disabled_option4 = $disabled_option5 = "class='bg-danger text-white' disabled";
                                             $count_member = 0;
+
+                                          
                                             foreach ($members as $member) {
                                                 //DEFAULT VALUES SET
                                                 $classStatus = 'bg-success';

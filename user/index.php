@@ -70,7 +70,7 @@
 
         $bank_cheque_sel = $bank_passbook_sel = "";
         $bank_disabled = $aadhaar_disabled = $pan_disabled = $photo_disabled = "";
-        
+            
         $user_doc_status = "";
 
         $url_dir = "../assets/files/transaction";
@@ -249,6 +249,8 @@
         $query = mysqli_query($conn, $query_wallet);
         $res = mysqli_fetch_array($query);
         extract($res);  
+
+        
     // GET WALLET DATA
 
     if ($sponsor_id != "") {
@@ -276,7 +278,7 @@
 FROM
     wallet_transaction w
 WHERE
-    w.user_id = $user_id";
+    w.user_id = $user_id AND w.transaction_mode = 'credit'";
 
 
 $query = mysqli_query($conn, $query_total_income);
@@ -284,6 +286,9 @@ $res = mysqli_fetch_assoc($query);
 
 // Sum of total withdrawal amount, total wallet commission, and total wallet roi
 $total_income = $res['total_amount'];
+
+// echo $total_income;
+// die();
 
 
 
@@ -307,10 +312,16 @@ $total_income = $res['total_amount'];
         $res = mysqli_fetch_array($query);
         extract($res);
 
+        // print_r($res);
+        // die();
+
         $query_invest = "SELECT IF(SUM(`transaction_amount`) IS NULL,0,SUM(`transaction_amount`)) AS 'invest_debit' FROM `fund_transaction` WHERE `user_id`='$user_id' AND `status`=1 AND `transaction_type` IN ('admin_debit','withdraw')";
         $query = mysqli_query($conn,$query_invest);
         $res = mysqli_fetch_array($query);
         extract($res);
+
+        //  print_r($res);
+        // die();
 
         $query_roi = "SELECT IF(SUM(`transaction_amount`) IS NULL,0,SUM(`transaction_amount`)) AS 'roi_credit' FROM `wallet_transaction` WHERE `user_id`='$user_id' AND `status`=1 AND `transaction_type`='roi'";
         $query = mysqli_query($conn,$query_roi);

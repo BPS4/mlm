@@ -379,7 +379,7 @@
                                                     <?php
                                                     // $kyc_done = 0;
                                                     // $current_date2 = 16;
-                                                    //   $current_datetimestart = 13;
+                                                    //   $current_datetimestart = 12;
                                                    
 
                                                         if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
@@ -406,6 +406,8 @@
                                                     &nbsp;
                                                     &nbsp;
                                                       <?php
+                                                     
+
                                                         if ($kyc_done == 0 && ($current_date2 == 1) && ($current_datetimestart >= 10 && $current_datetimestart <= 15)) {
                                                             ?>
                                                                 <a class='mt-3 btn btn-primary btn-sm text-white show-pointer' href="view_profile.php" onclick="return confirm('Complete Your KYC First!');">
@@ -934,13 +936,15 @@
             var admin_charges_commission = document.getElementById("admin_charges_commission");
             var tds_charges_commission = document.getElementById("tds_charges_commission");
             var total_withdrawal_amount_commission = document.getElementById("total_withdrawal_amount_commission");
+            var allowedwithdrawalamount= (fund_available * 2.5 )/ 100;
             var agree = document.getElementById("agree_commission");
+            console.log('new' + allowedwithdrawalamount);
             
             var wallet_investment = +<?php echo $wallet_investment; ?>;
             var wallet_roi = +<?php echo $wallet_roi; ?>;
             var wallet_commission = +<?php echo $wallet_commission; ?>;
             var superwallet = +<?php echo $superwallet; ?>;
-            var allowedwithdrawalamount= '<?php echo $allowedwithdrawalamount; ?>';
+            // var allowedwithdrawalamount= '<?php echo $allowedwithdrawalamount; ?>';
             a = fund_available%1000;
             min_allowed_amount = 1000;
             max_allowed_amount = (a ==fund_available?+(fund_available):  +(fund_available - a));
@@ -982,7 +986,7 @@
 
             if (withdrawal_amount_value_trim > allowedwithdrawalamount) {
                 withdrawal_amount.focus();
-                err_msg = "***As per your Limit you can max withdraw only <i>Rs."+allowedwithdrawalamount+" (You can withdraw only 20% of your previous month's investment amount or your first level business.)</i>***";
+                err_msg = "***As per your Limit you can max withdraw only <i>Rs."+allowedwithdrawalamount+" (You can withdraw only 2.5% of your available amount in Commission wallet.)</i>***";
                 msg_error_commission.innerHTML = err_msg;
                 show_element(msg_error_commission);
                 return
@@ -999,6 +1003,8 @@
             hide_element(msg_error_commission);
             hide_element(btn_save_commission);
             show_element(btn_saving_commission);
+
+            console.log(withdrawal_amount.value);
 
             $.ajax({
 				type: "POST",

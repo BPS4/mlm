@@ -112,6 +112,12 @@
                             By Admin
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="si debar-link" href="package_control.php">
+                            <i class="fa-solid fa-indian-rupee fa-xl" style="color: #3f80ea !important;"></i>
+                            Package Control
+                        </a>
+                    </li>
                     <!-- <li class="sidebar-item">
                         <a class="sidebar-link" href="view_transaction_pending.php?type=<?php echo base64_encode(json_encode("fresh")); ?>">
                             <i class="fa-solid fa-indian-rupee fa-xl" style="color: #3f80ea !important;"></i>

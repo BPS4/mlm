@@ -89,7 +89,7 @@
     SELECT w.*, u.name, u.pan 
     FROM `withdrawal` w
     JOIN `users` u ON w.user_id = u.user_id
-    WHERE w.status='Approved' and  w.create_date >= '2024-03-01'
+    WHERE w.status='Approved' and  w.create_date >= '2024-04-01'
     ORDER BY w.create_date DESC
 ";
         $res = mysqli_query($conn,$query);
@@ -285,16 +285,16 @@
 
                                                                 ?>
                                                                     <tr class="no-wrap">
-                                                                        <td class="has-html text-center"><?php echo $i; ?></td>
+                                                                        <td class="text-center"><?php echo $i; ?></td>
                                                                         
-                                                                        <td class="has-html text-center"><?php echo $user_id; ?></td>   
-                                                                        <td class="has-html text-center">
+                                                                        <td class="text-center"><?php echo $user_id; ?></td>   
+                                                                        <td class="text-center">
                                                                             <?php echo $name; ?>
                                                                         </td> 
-                                                                        <td class="has-html text-center">
+                                                                        <td class="text-center">
                                                                             <?php echo $pan; ?>
                                                                         </td>                                                                     
-                                                                        <td class="has-html text-center"><?php echo $create_date; ?></td>
+                                                                        <td class="text-center"><?php echo $create_date; ?></td>
                                                                         <td class="has-html text-center"><span class="badge bg-success" style="white-space: normal;"><?php echo number_format($item['tds'],2); ?></span></td>
                                                                     </tr>
                                                                 <?php

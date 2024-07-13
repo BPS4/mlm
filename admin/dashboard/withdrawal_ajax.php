@@ -72,42 +72,42 @@ mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
                 INNER JOIN users ON wallets.user_id = users.user_id 
                 WHERE wallets.user_id = $user_id";
 
-        // Execute query
-    $result = $conn->query($sql);
+                            // Execute query
+                        $result = $conn->query($sql);
 
-  // Initialize an empty array to store data
-$data = array();
+                    // Initialize an empty array to store data
+                    $data = array();
 
-// Check if any rows are returned
-if ($result->num_rows > 0) {
-    // Loop through each row and store the data in the array
-    while($row = $result->fetch_assoc()) {
-        $data[] = array(
-            'wallet_investment' => $row["wallet_investment"],
-            'wallet_roi' => $row["wallet_roi"],
-            'wallet_commission' => $row["wallet_commission"],
-            'name' => $row["name"]
-        );
-    }
-} else {
-    // If no rows are returned, store a message in the array
-    $data['message'] = "No results found for user ID: $user_id";
-}
+                    // Check if any rows are returned
+                    if ($result->num_rows > 0) {
+                        // Loop through each row and store the data in the array
+                        while($row = $result->fetch_assoc()) {
+                            $data[] = array(
+                                'wallet_investment' => $row["wallet_investment"],
+                                'wallet_roi' => $row["wallet_roi"],
+                                'wallet_commission' => $row["wallet_commission"],
+                                'name' => $row["name"]
+                            );
+                        }
+                    } else {
+                        // If no rows are returned, store a message in the array
+                        $data['message'] = "No results found for user ID: $user_id";
+                    }
 
-// Close connection
-$conn->close();
+                    // Close connection
+                    $conn->close();
 
-// Encode the data array as JSON
-$json_response = json_encode($data);
+                    // Encode the data array as JSON
+                    $json_response = json_encode($data);
 
-// Set proper content type header for JSON
-header('Content-Type: application/json');
+                    // Set proper content type header for JSON
+                    header('Content-Type: application/json');
 
-// Return the JSON response
-echo $json_response;
+                    // Return the JSON response
+                    echo $json_response;
 
-                    
-                 
+                                        
+                                    
                 }
 
 
@@ -194,6 +194,57 @@ echo $json_response;
                         $conn->close();
                     }
 
+                }
+
+                if (isset($_POST['package_action'])) {
+                   
+                    $package_action = $_POST['package_action'];
+
+                    $user_id = $_POST['user_id']; 
+                    // echo $user_id;
+
+                       // Prepare SQL statement
+                $sql = "SELECT fund_transaction.transaction_type, fund_transaction.transaction_date,fund_transaction.transaction_amount,fund_transaction.status, users.name 
+                FROM fund_transaction 
+                INNER JOIN users ON wallets.user_id = users.user_id 
+                WHERE wallets.user_id = $user_id";
+
+                            // Execute query
+                        $result = $conn->query($sql);
+
+                    // Initialize an empty array to store data
+                    $data = array();
+
+                    // Check if any rows are returned
+                    if ($result->num_rows > 0) {
+                        // Loop through each row and store the data in the array
+                        while($row = $result->fetch_assoc()) {
+                            $data[] = array(
+                                'wallet_investment' => $row["wallet_investment"],
+                                'wallet_roi' => $row["wallet_roi"],
+                                'wallet_commission' => $row["wallet_commission"],
+                                'name' => $row["name"]
+                            );
+                        }
+                    } else {
+                        // If no rows are returned, store a message in the array
+                        $data['message'] = "No results found for user ID: $user_id";
+                    }
+
+                    // Close connection
+                    $conn->close();
+
+                    // Encode the data array as JSON
+                    $json_response = json_encode($data);
+
+                    // Set proper content type header for JSON
+                    header('Content-Type: application/json');
+
+                    // Return the JSON response
+                    echo $json_response;
+
+                                        
+                                    
                 }
 
               

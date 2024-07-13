@@ -140,7 +140,7 @@
         }
     }
 
-    error_occurred:
+    // error_occurred:
     $query = "SELECT 
     u.`id`, u.`sponsor_id`, u.`user_id`, u.`user_rank`, u.`name`, u.`fhname`, 
     u.`mobile`, u.`email`, u.`whatsapp`, u.`aadhaar`, u.`aadhaar_file`, 

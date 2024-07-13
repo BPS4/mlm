@@ -11,6 +11,8 @@ if (!$res_select) {
 $wallets = mysqli_fetch_all($res_select, MYSQLI_ASSOC);
 
 // Step 2: Loop through each wallet record
+
+
 foreach ($wallets as $wallet) {
     $user_id = $wallet['user_id'];
     $superwallet = $wallet['superwallet'];
@@ -40,7 +42,8 @@ foreach ($wallets as $wallet) {
 
     // echo'hellow';
 
-    $query_insert = "
+    if($transaction_amount > 0){
+        $query_insert = "
         INSERT INTO wallet_transaction (
             transaction_type, transaction_mode, user_id,  from_user_id, 
             transaction_amount, status, updated_by, create_date
@@ -50,6 +53,9 @@ foreach ($wallets as $wallet) {
     ";
 
     $res_insert = mysqli_query($conn, $query_insert);
+    }
+
+  
 
     if (!$res_insert) {
         die('Error: ' . mysqli_error($conn));

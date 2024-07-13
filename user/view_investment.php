@@ -352,7 +352,7 @@
                                                                            
                                                                         // $transaction_status = "<span class='badge bg-danger rounded show-pointer' title='$comment'><i class='icofont icofont-info-circle f-16'></i>REJECTED</span>";
                                                                         $transaction_status = '<span class="badge bg-danger shadow rounded show-pointer" type="button" data-bs-trigger="hover"
-                                                                            data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" title="Rejection Reason"
+                                                                            data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" title="'.$update_date.'"
                                                                             data-offset="-20px -20px"
                                                                             data-bs-content="'.$comment.'">
                                                                             <i class="icofont icofont-info-circle f-16"></i>DEACTIVATED

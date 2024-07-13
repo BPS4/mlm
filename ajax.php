@@ -672,27 +672,27 @@ if ($withdrawal_amount > 1000000) {
         // GET WALLET DATA
 
         // GET SELF INVESTMENT
-            $query_selfinvestment = "Select `transaction_amount` as `self_investement` from fund_transaction  where user_id = '$user_id' and transaction_type in ('fresh' , 'admin_credit', 'superwallet') and create_date >= '$firstdate' and create_date <=  '$lastdate';";
-            $queryselfinvestment = mysqli_query($conn, $query_selfinvestment);
-            $resselfinvestment = mysqli_fetch_array($queryselfinvestment);
-            extract($resselfinvestment);  
+            // $query_selfinvestment = "Select `transaction_amount` as `self_investement` from fund_transaction  where user_id = '$user_id' and transaction_type in ('fresh' , 'admin_credit', 'superwallet') and create_date >= '$firstdate' and create_date <=  '$lastdate';";
+            // $queryselfinvestment = mysqli_query($conn, $query_selfinvestment);
+            // $resselfinvestment = mysqli_fetch_array($queryselfinvestment);
+            // extract($resselfinvestment);  
         // GET SELF INVESTMENT
 
         // GET LEVEL 1 INVESTMENT
-            $query_level1investment = "SELECT sum(ifnull((SELECT`wallets`.`wallet_investment` FROM `wallets` WHERE `user_id`=`levels`.`user_id` and `wallets`.`create_date` >= '$firstdate'
-            and `wallets`.`create_date` <=  '$lastdate'),0)) AS 'level1_investment' 
-            FROM `levels` LEFT JOIN `users` ON `users`.`user_id`=`levels`.`user_id` LEFT JOIN `wallets` ON `wallets`.`user_id`=`levels`.`user_id_up` WHERE `levels`.`user_id_up`='$user_id' 
-            and `levels`.`level` = 1 ORDER BY `levels`.`level` ASC";
-            $querylevel1investment = mysqli_query($conn, $query_level1investment);
-            $reslevel1investment = mysqli_fetch_array($querylevel1investment);
-            extract($reslevel1investment);  
+            // $query_level1investment = "SELECT sum(ifnull((SELECT`wallets`.`wallet_investment` FROM `wallets` WHERE `user_id`=`levels`.`user_id` and `wallets`.`create_date` >= '$firstdate'
+            // and `wallets`.`create_date` <=  '$lastdate'),0)) AS 'level1_investment' 
+            // FROM `levels` LEFT JOIN `users` ON `users`.`user_id`=`levels`.`user_id` LEFT JOIN `wallets` ON `wallets`.`user_id`=`levels`.`user_id_up` WHERE `levels`.`user_id_up`='$user_id' 
+            // and `levels`.`level` = 1 ORDER BY `levels`.`level` ASC";
+            // $querylevel1investment = mysqli_query($conn, $query_level1investment);
+            // $reslevel1investment = mysqli_fetch_array($querylevel1investment);
+            // extract($reslevel1investment);  
         // GET LEVEL 1 INVESTMENT
-        $allowedwithdrawalamount = 0;
-        if($self_investement < $level1_investment){
-            $allowedwithdrawalamount = $level1_investment *20 / 100;
-        }else{
-            $allowedwithdrawalamount = $self_investement *20 / 100;
-        }
+        // $allowedwithdrawalamount = 0;
+        // if($self_investement < $level1_investment){
+        //     $allowedwithdrawalamount = $level1_investment *20 / 100;
+        // }else{
+        //     $allowedwithdrawalamount = $self_investement *20 / 100;
+        // }
 
         // if ($wallet_investment == 0) {
         //     echo "not_active";
@@ -708,15 +708,21 @@ if ($wallet_commission==0)
     echo "not_active";
     exit;
 }
+
+// $kyc_done = 0;
+// $current_date2 = 16;
+// $current_datetimestart = 12;
+
+
 if (!(($current_date2 == 1 || $current_date2 == 16) && ($current_datetimestart >= 10 && $current_datetimestart <= 15))){
  echo "not_allowed";
             exit;
 }
 
-if ($withdrawal_amount > $allowedwithdrawalamount) {
-    echo "fund_limit_exceed";
-            exit;
-}
+// if ($withdrawal_amount > $allowedwithdrawalamount) {
+//     echo "fund_limit_exceed";
+//             exit;
+// }
 
 // if ($current_day != "Fri") {
   //          echo "not_allowed";
