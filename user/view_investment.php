@@ -366,26 +366,26 @@
                                                                 ?>
                                                                   
                                                                   <?php if (strpos($transaction_status, 'DEACTIVATED') !== false): ?>
-<tr style="display: none;">
-    <td><?php echo $i; ?></td>
-    <td class="d-none"><?php echo $user_id; ?></td>
-    <td class="text-center"><?php echo $transaction_type; ?></td>
-    <td>₹ <?php echo number_format($transaction_amount, 2); ?></td>
-    <td><?php echo $transaction_date; ?></td>
-    <td><?php echo $transaction_status; ?></td>
-    <td><?php echo $update_date; ?></td>
-</tr>
-<?php else: ?>
-<tr>
-    <td><?php echo $i; ?></td>
-    <td class="d-none"><?php echo $user_id; ?></td>
-    <td class="text-center"><?php echo $transaction_type; ?></td>
-    <td>₹ <?php echo number_format($transaction_amount, 2); ?></td>
-    <td><?php echo $transaction_date; ?></td>
-    <td><?php echo $transaction_status; ?></td>
-    <td><?php echo $update_date; ?></td>
-</tr>
-<?php endif; ?>
+                                            <tr style="display: none;">
+                                                <td><?php echo $i; ?></td>
+                                                <td class="d-none"><?php echo $user_id; ?></td>
+                                                <td class="text-center"><?php echo $transaction_type; ?></td>
+                                                <td>₹ <?php echo number_format($transaction_amount, 2); ?></td>
+                                                <td><?php echo $transaction_date; ?></td>
+                                                <td><?php echo $transaction_status; ?></td>
+                                                <td><?php echo $update_date; ?></td>
+                                            </tr>
+                                            <?php else: ?>
+                                            <tr>
+                                                <td><?php echo $i; ?></td>
+                                                <td class="d-none"><?php echo $user_id; ?></td>
+                                                <td class="text-center"><?php echo $transaction_type; ?></td>
+                                                <td>₹ <?php echo number_format($transaction_amount, 2); ?></td>
+                                                <td><?php echo $transaction_date; ?></td>
+                                                <td><?php echo $transaction_status; ?></td>
+                                                <td><?php echo $update_date; ?></td>
+                                            </tr>
+                                            <?php endif; ?>
 
                                                                 <?php
                                                             }

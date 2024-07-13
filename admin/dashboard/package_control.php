@@ -246,7 +246,7 @@
                                                             <th>Amount</th>
                                                             <th>Transaction Date</th>
                                                             <th>Status</th>
-                                                            <th>Update Date</th>
+                                                           
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -264,7 +264,7 @@
                                                             <th>Amount</th>
                                                             <th>Transaction Date</th>
                                                             <th>Status</th>
-                                                            <th>Txn Date</th>
+                                                           
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -347,14 +347,22 @@ $(document).ready(function () {
                     // Populate table with response data
                     responseData.forEach((item, index) => {
                         const statusMap = {
-                            '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
-                            '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
-                            '3': '<span class="badge bg-danger shadow rounded show-pointer"><i class="icofont icofont-info-circle f-16"></i>DEACTIVATED</span>'
-                        };
+        '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
+        '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
+        '3': `<span class="badge bg-danger shadow rounded show-pointer" type="button" data-bs-trigger="hover"
+            data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" title="${formatDate(new Date())}"
+            data-offset="-20px -20px"
+           >
+            <i class="icofont icofont-info-circle f-16"></i>DEACTIVATED
+            </span>`
+    };
 
                         const transactionMap = {
                             'admin_credit': '<span class="badge bg-success shadow rounded">Admin Added</span>',
-                            'withdraw': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>'
+                            'admin_debit': '<span class="badge bg-success shadow rounded">Admin Debit</span>',
+                            'withdraw': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
+                            'fresh': '<span class="badge bg-warning shadow rounded">fresh</span>',
+                            'superwallet': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
                         };
 
                         const statusText = statusMap[item.status] || 'Unknown';
@@ -370,7 +378,7 @@ $(document).ready(function () {
                                 <td>${item.transaction_amount}</td>
                                 <td>${transactionDate}</td>
                                 <td>${statusText}</td>
-                                <td>${updateDate}</td>
+                            
                             </tr>
                         `;
                         $('#datatables tbody').append(row);
