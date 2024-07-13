@@ -298,9 +298,24 @@
     <?php include_once('scripts.php'); ?>
 
  
+   
+    
+  
 <script>
 $(document).ready(function () {
     var responseData; // Define responseData in a broader scope
+
+    // Function to format dates to "22-Dec-2023"
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+
+        return `${day}-${month}-${year}`;
+    }
 
     // Function to update the Amount input based on the selected option
     function updateAmount() {
@@ -332,20 +347,26 @@ $(document).ready(function () {
                     // Populate table with response data
                     responseData.forEach((item, index) => {
                         const statusMap = {
-                        '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
-                        '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
-                        '3': '<span class="badge bg-danger shadow rounded show-pointer"><i class="icofont icofont-info-circle f-16"></i>DEACTIVATED</span>'
-                    };
+                            '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
+                            '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
+                            '3': '<span class="badge bg-danger shadow rounded show-pointer"><i class="icofont icofont-info-circle f-16"></i>DEACTIVATED</span>'
+                        };
+
+                        const transactionMap = {
+                            'admin_credit': '<span class="badge bg-success shadow rounded">Admin Added</span>',
+                            'withdraw': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>'
+                        };
 
                         const statusText = statusMap[item.status] || 'Unknown';
-                        const transactionDate = item.transaction_date || 'N/A';
-                        const updateDate = new Date().toLocaleDateString(); // Example for Update Date
+                        const transactionText = transactionMap[item.transaction_type] || 'Unknown';
+                        const transactionDate = item.transaction_date ? formatDate(item.transaction_date) : 'N/A';
+                        const updateDate = formatDate(new Date().toISOString()); // Example for Update Date
 
                         const row = `
                             <tr>
                                 <td>${index + 1}</td>
                                 <td class="d-none">${item.name}</td>
-                                <td>${item.transaction_type}</td>
+                                <td>${transactionText}</td>
                                 <td>${item.transaction_amount}</td>
                                 <td>${transactionDate}</td>
                                 <td>${statusText}</td>
@@ -370,6 +391,8 @@ $(document).ready(function () {
     });
 });
 </script>
+
+
 
 
 
