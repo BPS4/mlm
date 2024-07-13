@@ -206,8 +206,8 @@ mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
                        // Prepare SQL statement
                 $sql = "SELECT fund_transaction.transaction_type, fund_transaction.transaction_date,fund_transaction.transaction_amount,fund_transaction.status, users.name 
                 FROM fund_transaction 
-                INNER JOIN users ON wallets.user_id = users.user_id 
-                WHERE wallets.user_id = $user_id";
+                INNER JOIN users ON fund_transaction.user_id = users.user_id 
+                WHERE fund_transaction.user_id = $user_id";
 
                             // Execute query
                         $result = $conn->query($sql);
@@ -220,10 +220,12 @@ mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
                         // Loop through each row and store the data in the array
                         while($row = $result->fetch_assoc()) {
                             $data[] = array(
-                                'wallet_investment' => $row["wallet_investment"],
-                                'wallet_roi' => $row["wallet_roi"],
-                                'wallet_commission' => $row["wallet_commission"],
-                                'name' => $row["name"]
+                                'transaction_type' => $row["transaction_type"],
+                                'transaction_date' => $row["transaction_date"],
+                                'transaction_amount' => $row["transaction_amount"],
+                                'status' => $row["status"],
+                                'name' => $row["name"],
+                             
                             );
                         }
                     } else {

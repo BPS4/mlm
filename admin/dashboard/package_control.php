@@ -144,7 +144,7 @@
 <head>
     <?php include_once('head.php'); ?>
 
-    <title><?php  echo "Do Withdrawal - Admin - Maxizone"; ?></title>
+    <title><?php  echo "Package Control - Admin - Maxizone"; ?></title>
 
     <link rel="canonical" href="view_bankinfo.php">
 
@@ -188,7 +188,7 @@
             <main class="content">
                 <div class="container-fluid p-0">
 
-                    <h1 class="h3 mb-3">Do User Withdrawal</h1>
+                    <h1 class="h3 mb-3">Package Control</h1>
 
                     <div class="row">
                         <div class="col-md-12 col-xl-12">
