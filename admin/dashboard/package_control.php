@@ -224,52 +224,58 @@
                                                 <label for="branch_name" class="form-label">User Name</label>
                                                 <input type="text" class="form-control" name="user_name" id="user_name" placeholder="User Name" >
                                             </div>
+                                           
+                                        </div>
 
-                                            <div class="mb-3 col-xl-12">
-                                                <label for="bank_name" class="form-label">Wallet-Type</label>
-                                                <select class="form-control " id="Wallet_Type" name="Wallet_Type" required>
-                                                <option value="Select" >Select</option>
-                                                    <option value="Investment Wallet" >Investment</option>
-                                                    <option value="ROI Wallet" >ROI</option>
-                                                    <option value="Comission Wallet" >Commission</option>
-                                                   </option>
-                                                            
-                                                </select>
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label for="branch_address" class="form-label">Available Amount</label>
-                                                <input type="text" class="form-control" name="Amount" id="Amount" placeholder="Available Amount" readonly >
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label for="branch_address" class="form-label">Withdrawal Amount</label>
-                                                <input type="text" class="form-control" name="withdrawal_amount" id="withdrawal_amount" placeholder="Withdrawal Amount" >
-                                                <span id="withdrawal_amount_err" class="err_mess" style="color:red; font: size 10px;"></span>
-                                            </div>
+                                        <div class="page-body">
+                    <div class="container-fluid p-4">
+                        <!-- Content -->
+                            <!-- <div class="container-xxl flex-grow-1 container-p-y"> -->
+                                <!-- <div class="row g-4 mb-4 align-items-center"> -->
+                                    <!-- Users List Table -->
+                                    <div class="row g-4 mb-4 align-items-center">
+                                        <div class="card px-1">
                                           
+                                            <div class="card-datatable table-responsive">
+                                                <table id="datatables" class="datatables table border-top table-strriped table-info table-hover border-primary">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr</th>
+                                                            <th class="d-none">User ID</th>
+                                                            <th>Transaction Type</th>
+                                                            <th>Amount</th>
+                                                            <th>Transaction Date</th>
+                                                            <th>Status</th>
+                                                            <th>Update Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       
+                                                                  
+                                                               
 
-                                            <div class="mb-3 col-md-6">
-
-
-                                                <label for="account_no" class="form-label">Deduction</label>
-                                                <input type="text" class="form-control" name="Deduction" id="Deduction" placeholder="Deduction" >
-                                            </div>
-                                            <div class="mb-3 col-md-6">
-                                                <label for="ifs_code" class="form-label">Net Amount</label>
-                                                <input type="text" class="form-control" name="Net_Amount" id="Net_Amount" placeholder="Net Amount" >
-                                            </div>
-                                            <div class="mb-3 col-md-6">
-                                                <label for="ifs_code" class="form-label">Balance Amount</label>
-                                                <input type="text" class="form-control" name="Balance_Amount" id="Balance_Amount" placeholder="Net Amount" >
-                                            </div>
-                                           
-                                           
-                                            <div style="float:right;">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-success" id="submit_withdrawal_button" name="submit_withdrawal">Submit</button>
+                                                                                                         
+                                                    </tbody>
+                                                    <tfoot class="d-none">
+                                                        <tr>
+                                                            <th>Sr</th>
+                                                            <th>User ID</th>
+                                                            <th>Transaction Type</th>
+                                                            <th>Amount</th>
+                                                            <th>Transaction Date</th>
+                                                            <th>Status</th>
+                                                            <th>Txn Date</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
                                             </div>
                                         </div>
+                                    </div>
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- / Content -->
+                    </div>
+                </div>
                                     </form>
 
                                 </div>
@@ -298,59 +304,15 @@
                                 var deduction; // Define deduction variable in a broader scope
 
                                 // Function to update the Amount input based on the selected option
-                                function updateAmount(selectedOption) {
+                                function updateAmount() {
                                     // Get the value of the selected option
-                                    var selectedValue = $(selectedOption).val();
+                                  
 
-                                    // Set the value of the Amount input based on the selected option
-                                    if (selectedValue === 'Investment Wallet') {
-                                        amount = responseData.wallet_investment;
-                                        deduction = 50;
-                                    } else if (selectedValue === 'ROI Wallet') {
-                                        amount = responseData.wallet_roi;
-                                        deduction = 15;
-                                    } else if (selectedValue === 'Comission Wallet') {
-                                        amount = responseData.wallet_commission;
-                                        deduction = 15;
-                                    }
-
-                                    $('#Amount').val(amount);
-
-                                    // Event listener for changes in the withdrawal amount input
-                                    $('#withdrawal_amount').keyup(function () {
-                                        updateDeductions();
-                                    });
+                                  
                                 }
 
-                                function updateDeductions() {
-                                    // Get the withdrawal amount
-                                    var withdrawalAmount = parseFloat($('#withdrawal_amount').val());
-
-                                    if (withdrawalAmount > amount) {
-                                        alert('Withdrawal amount cannot exceed available balance.');
-                                        return; // Exit the function
-                                    }
-
-                                    // Calculate deductedAmount
-                                    var deductedAmount = withdrawalAmount * deduction / 100;
-
-                                    // Set Deduction input value
-                                    $('#Deduction').val(deductedAmount);
-
-                                    // Calculate Net Amount
-                                    var netAmount = withdrawalAmount - deductedAmount;
-                                    $('#Net_Amount').val(netAmount);
-
-                                    var balanceAmount = amount-withdrawalAmount;
-                                    $('#Balance_Amount').val(balanceAmount);
-                                }
-
-                                // Event listener for changes in the select box
-                                $('#Wallet_Type').change(function() {
-                                    // Call the updateAmount function with the selected option
-                                    updateAmount(this);
-                                });
-
+                               
+                              
                                 $('#user_id').keyup(function () {
                                     var user_id = $(this).val();
                                     if (user_id.length === 6) {
@@ -372,7 +334,7 @@
                                                 $('#user_name').val(responseData.name);
 
                                                 // Call the updateAmount function with the selected option
-                                                updateAmount($('#Wallet_Type').get(0));
+                                                updateAmount();
                                             },
                                             error: function (xhr, status, error) {
                                                 // Handle errors
