@@ -297,54 +297,80 @@
 
     <?php include_once('scripts.php'); ?>
 
-                                <script>
-                            $(document).ready(function () {
-                                var responseData; // Define responseData in a broader scope
-                                var amount; // Define amount variable in a broader scope
-                                var deduction; // Define deduction variable in a broader scope
+ 
+<script>
+$(document).ready(function () {
+    var responseData; // Define responseData in a broader scope
 
-                                // Function to update the Amount input based on the selected option
-                                function updateAmount() {
-                                    // Get the value of the selected option
-                                  
+    // Function to update the Amount input based on the selected option
+    function updateAmount() {
+        // Get the value of the selected option
+        // Implementation here...
+    }
 
-                                  
-                                }
+    $('#user_id').keyup(function () {
+        var user_id = $(this).val();
+        if (user_id.length === 6) {
+            // AJAX request
+            $.ajax({
+                url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
+                type: 'post',
+                data: {
+                    package_action: 'user_details', // Action to call user_details function
+                    user_id: user_id
+                },
+                success: function (response) {
+                    // Handle response from server
+                    console.log(response);
 
-                               
-                              
-                                $('#user_id').keyup(function () {
-                                    var user_id = $(this).val();
-                                    if (user_id.length === 6) {
-                                        // AJAX request
-                                        $.ajax({
-                                            url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
-                                            type: 'post',
-                                            data: {
-                                                package_action: 'user_details', // Action to call user_details function
-                                                user_id: user_id
-                                            },
-                                            success: function (response) {
-                                                // Handle response from server
-                                                console.log(response);
+                    // Assuming response is the JSON array you received
+                    responseData = response; // Assign responseData
+                    
+                    // Clear existing table rows
+                    $('#datatables tbody').empty();
 
-                                                // Assuming response is the JSON array you received
-                                                responseData = response[0]; // Assign responseData
-                                                // Set the value of the input box to the value of the "name" field in the response object
-                                                $('#user_name').val(responseData.name);
+                    // Populate table with response data
+                    responseData.forEach((item, index) => {
+                        const statusMap = {
+                        '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
+                        '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
+                        '3': '<span class="badge bg-danger shadow rounded show-pointer"><i class="icofont icofont-info-circle f-16"></i>DEACTIVATED</span>'
+                    };
 
-                                                // Call the updateAmount function with the selected option
-                                                updateAmount();
-                                            },
-                                            error: function (xhr, status, error) {
-                                                // Handle errors
-                                                console.error(xhr.responseText);
-                                            }
-                                        });
-                                    }
-                                });
-                            });
-                            </script>
+                        const statusText = statusMap[item.status] || 'Unknown';
+                        const transactionDate = item.transaction_date || 'N/A';
+                        const updateDate = new Date().toLocaleDateString(); // Example for Update Date
+
+                        const row = `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td class="d-none">${item.name}</td>
+                                <td>${item.transaction_type}</td>
+                                <td>${item.transaction_amount}</td>
+                                <td>${transactionDate}</td>
+                                <td>${statusText}</td>
+                                <td>${updateDate}</td>
+                            </tr>
+                        `;
+                        $('#datatables tbody').append(row);
+                    });
+
+                    // Set the value of the input box to the value of the "name" field in the response object
+                    $('#user_name').val(responseData[0].name);
+
+                    // Call the updateAmount function with the selected option
+                    updateAmount();
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+});
+</script>
+
 
 
                                     <script>
