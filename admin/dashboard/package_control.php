@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <link rel="shortcut icon" href="../../assets/images/favicon.svg" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icofont/1.0.1/css/icofont.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css">
+
+<!-- Your script -->
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+
 <?php
     ob_start();
     require_once '../../db_connect.php';
+    require_once("head.php"); 
     session_start();
 
     mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
@@ -178,6 +187,8 @@
     </style>
 </head>
 
+
+
 <body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
     <div class="wrapper">
         <?php include_once('sidebar.php'); ?>
@@ -301,104 +312,108 @@
    
     
   
-<script>
-$(document).ready(function () {
-    var responseData; // Define responseData in a broader scope
+    <script>
+    $(document).ready(function () {
+        var responseData; // Define responseData in a broader scope
 
-    // Function to format dates to "22-Dec-2023"
-    function formatDate(dateString) {
-        if (!dateString) return 'N/A';
+        // Function to format dates to "22-Dec-2023"
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
 
-        const date = new Date(dateString);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = date.toLocaleString('default', { month: 'short' });
-        const year = date.getFullYear();
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
 
-        return `${day}-${month}-${year}`;
-    }
-
-    // Function to update the Amount input based on the selected option
-    function updateAmount() {
-        // Get the value of the selected option
-        // Implementation here...
-    }
-
-    $('#user_id').keyup(function () {
-        var user_id = $(this).val();
-        if (user_id.length === 6) {
-            // AJAX request
-            $.ajax({
-                url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
-                type: 'post',
-                data: {
-                    package_action: 'user_details', // Action to call user_details function
-                    user_id: user_id
-                },
-                success: function (response) {
-                    // Handle response from server
-                    console.log(response);
-
-                    // Assuming response is the JSON array you received
-                    responseData = response; // Assign responseData
-                    
-                    // Clear existing table rows
-                    $('#datatables tbody').empty();
-
-                    // Populate table with response data
-                    responseData.forEach((item, index) => {
-                        const statusMap = {
-        '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
-        '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
-        '3': `<span class="badge bg-danger shadow rounded show-pointer" type="button" data-bs-trigger="hover"
-            data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" title="${formatDate(new Date())}"
-            data-offset="-20px -20px"
-           >
-            <i class="icofont icofont-info-circle f-16"></i>DEACTIVATED
-            </span>`
-    };
-
-                        const transactionMap = {
-                            'admin_credit': '<span class="badge bg-success shadow rounded">Admin Added</span>',
-                            'admin_debit': '<span class="badge bg-success shadow rounded">Admin Debit</span>',
-                            'withdraw': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
-                            'fresh': '<span class="badge bg-warning shadow rounded">fresh</span>',
-                            'superwallet': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
-                        };
-
-                        const statusText = statusMap[item.status] || 'Unknown';
-                        const transactionText = transactionMap[item.transaction_type] || 'Unknown';
-                        const transactionDate = item.transaction_date ? formatDate(item.transaction_date) : 'N/A';
-                        const updateDate = formatDate(new Date().toISOString()); // Example for Update Date
-
-                        const row = `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td class="d-none">${item.name}</td>
-                                <td>${transactionText}</td>
-                                <td>${item.transaction_amount}</td>
-                                <td>${transactionDate}</td>
-                                <td>${statusText}</td>
-                            
-                            </tr>
-                        `;
-                        $('#datatables tbody').append(row);
-                    });
-
-                    // Set the value of the input box to the value of the "name" field in the response object
-                    $('#user_name').val(responseData[0].name);
-
-                    // Call the updateAmount function with the selected option
-                    updateAmount();
-                },
-                error: function (xhr, status, error) {
-                    // Handle errors
-                    console.error(xhr.responseText);
-                }
-            });
+            return `${day}-${month}-${year}`;
         }
+
+        // Function to update the Amount input based on the selected option
+        function updateAmount() {
+            // Get the value of the selected option
+            // Implementation here...
+        }
+
+        $('#user_id').keyup(function () {
+            var user_id = $(this).val();
+            if (user_id.length === 6) {
+                // AJAX request
+                $.ajax({
+                    url: '/mlm/admin/dashboard/withdrawal_ajax.php', // URL of your PHP script
+                    type: 'post',
+                    data: {
+                        package_action: 'user_details', // Action to call user_details function
+                        user_id: user_id
+                    },
+                    success: function (response) {
+                        // Handle response from server
+                        console.log(response);
+
+                        // Assuming response is the JSON array you received
+                        responseData = response; // Assign responseData
+                        
+                        // Clear existing table rows
+                        $('#datatables tbody').empty();
+
+                        // Populate table with response data
+                        responseData.forEach((item, index) => {
+                            const statusMap = {
+                                '1': '<span class="badge bg-success shadow rounded">ACTIVE</span>',
+                                '2': '<span class="badge bg-warning shadow rounded">PENDING</span>',
+                                '3': `<span class="badge bg-danger shadow rounded show-pointer" type="button" data-bs-trigger="hover"
+                                    data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" title="${formatDate(new Date())}"
+                                    data-offset="-20px -20px">
+                                    <i class="icofont icofont-info-circle f-16"></i>DEACTIVATED
+                                    </span>`
+                            };
+
+                            const transactionMap = {
+                                'admin_credit': '<span class="badge bg-success shadow rounded">Admin Added</span>',
+                                'admin_debit': '<span class="badge bg-success shadow rounded">Admin Debit</span>',
+                                'withdraw': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
+                                'fresh': '<span class="badge bg-warning shadow rounded">fresh</span>',
+                                'superwallet': '<span class="badge bg-danger shadow rounded">SuperWallet Transfer</span>',
+                            };
+
+                            const statusText = statusMap[item.status] || 'Unknown';
+                            const transactionText = transactionMap[item.transaction_type] || 'Unknown';
+                            const transactionDate = item.transaction_date ? formatDate(item.transaction_date) : 'N/A';
+                            const updateDate = formatDate(new Date().toISOString()); // Example for Update Date
+
+                            const row = `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td class="d-none">${item.name}</td>
+                                    <td>${transactionText}</td>
+                                    <td>₹ ${item.transaction_amount}</td>
+                                    <td>${transactionDate}</td>
+                                    <td onclick="updateStatus(${item.id})">${statusText}</td>
+                                </tr>
+                            `;
+                            $('#datatables tbody').append(row);
+                        });
+
+                        // Set the value of the input box to the value of the "name" field in the response object
+                        $('#user_name').val(responseData[0].name);
+
+                        // Call the updateAmount function with the selected option
+                        updateAmount();
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
     });
-});
-</script>
+
+    // Function to update status (mock implementation)
+    function updateStatus(id) {
+        alert('Update status for ID: ' + id);
+        // Add actual implementation here...
+    }
+    </script>
 
 
 

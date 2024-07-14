@@ -204,7 +204,7 @@ mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
                     // echo $user_id;
 
                        // Prepare SQL statement
-                $sql = "SELECT fund_transaction.transaction_type, fund_transaction.create_date,fund_transaction.transaction_amount,fund_transaction.status, users.name 
+                $sql = "SELECT fund_transaction.id, fund_transaction.transaction_type, fund_transaction.create_date,fund_transaction.transaction_amount,fund_transaction.status, users.name 
                 FROM fund_transaction 
                 INNER JOIN users ON fund_transaction.user_id = users.user_id 
                 WHERE fund_transaction.user_id = $user_id";
@@ -220,6 +220,7 @@ mysqli_query($conn, "set names 'utf8'"); //-------WORKING UTF8 CODE------//
                         // Loop through each row and store the data in the array
                         while($row = $result->fetch_assoc()) {
                             $data[] = array(
+                                'id' => $row["id"],
                                 'transaction_type' => $row["transaction_type"],
                                 'transaction_date' => $row["create_date"],
                                 'transaction_amount' => $row["transaction_amount"],
